@@ -1,6 +1,7 @@
 <html>
 <head>
 	<script src='sprites.js'></script>
+	<script src='scripts/evobeastData.js'></script>
 	<style>
 	canvas {
 		image-rendering: pixelated;
@@ -9,28 +10,59 @@
 </head>
 <body>
 <h1>Welcome to Evobeasts</h1>
-<canvas id='ctx' width='960' height='640' style='border:1px solid #000000;'></canvas>
+<canvas id='ctx' style='border:1px solid #000000;'></canvas>
+<button onclick='attack()'>Click</button>
 <script>
+	function attack() {
+		battleInst.allyTamer.state='attack';
+		battleInst.allyTamer.img.frameCurrent = 0;
+		battleInst.allyTamer.img.imageSpeed = battleInst.allyTamer.img.sheetData[battleInst.allyTamer.state].speed;
+	}
 	var ctx = document.getElementById('ctx').getContext('2d');
-	ctx.imageSmoothingEnabled = false;
 	var canvas = document.getElementById('ctx');
 	var renla = {};
+	var WIDTH = 960;
+	var HEIGHT = 640;
+	var STRETCH = 4;
+	var evobeastSprites = {};
+	canvas.width = WIDTH;
+	canvas.height = HEIGHT;
+	ctx.imageSmoothingEnabled = false;
+	for (var e in evobeastData) {
+		evobeastSprites[e] = {};
+		createImage(evobeastSprites[e], 'evobeasts/'+e, 0, 0, evobeastSheetData, evobeastSheetData.idle.up);
+	}
 	var battleBack = {};
 	createBattleBack(battleBack, 'grass');
 	//createImage(battleBack, 'battle_backs/bg_battle_grass', 0, 0, {}, {xx:0,yy:00,ww:240,hh:160,});
 	
-	createImage(renla, 'evobeasts/spr_renla', 0, 0, evobeastSheetData, evobeastSheetData.idle.up);
-	var WIDTH = 960;
-	var HEIGHT = 640;
-	var STRETCH = 4;
+	//createImage(renla, 'evobeasts/spr_renla', 0, 0, evobeastSheetData, evobeastSheetData.idle.up);
 	ctx.font = '30px Arial';
 	setInterval(update, 60);
 	function update() {
 		ctx.clearRect(0, 0, WIDTH, HEIGHT);
 		drawBattleBack(ctx, battleBack);
-		drawEvobeast(ctx, renla, 'idle', 'down');
-		//ctx.drawImage(battleBack.img, battleBack.x, battleBack.y, battleBack.sheetData.ww, battleBack.sheetData.hh) ;
+		for (var c in battleInst) {
+			var inst = battleInst[c];
+			if (inst.img.hasOwnProperty('img')) {
+				drawEvobeast(ctx, inst.img, inst.xx, inst.yy, inst.state,inst.dir);
+			}
+		}
 	}
+	var battleInst = {
+		allyTamer:{img:{},xx:104,yy:104,dir:'up',state:'idle'},
+		allyEvobeast1:{img:{},xx:48,yy:104,dir:'up',state:'idle'},
+		allyEvobeast2:{img:{},xx:160,yy:104,dir:'up',state:'idle'},
+		enemyTamer:{img:{},xx:104,yy:32,dir:'down',state:'idle'},
+		enemyEvobeast1:{img:{},xx:48,yy:32,dir:'down',state:'idle'},
+		enemyEvobeast2:{img:{},xx:160,yy:32,dir:'down',state:'idle'},
+	};
+	battleInst.allyTamer.img = evobeastSprites.will_sword;
+	battleInst.allyEvobeast1.img = evobeastSprites.renla;
+	battleInst.allyEvobeast2.img = evobeastSprites.renla;
+	battleInst.enemyEvobeast1.img = evobeastSprites.vespra;
+	battleInst.enemyEvobeast2.img = evobeastSprites.vespra;
+	//function 
 </script>
 </body>
 </html>
