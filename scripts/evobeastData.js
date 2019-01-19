@@ -1,0 +1,6 @@
+evobeastData = {
+	renla: {
+	},
+	vespra: {
+	},
+}

@@ -1,0 +1,36 @@
+<html>
+<head>
+	<script src='sprites.js'></script>
+	<style>
+	canvas {
+		image-rendering: pixelated;
+	}
+	</style>
+</head>
+<body>
+<h1>Welcome to Evobeasts</h1>
+<canvas id='ctx' width='960' height='640' style='border:1px solid #000000;'></canvas>
+<script>
+	var ctx = document.getElementById('ctx').getContext('2d');
+	ctx.imageSmoothingEnabled = false;
+	var canvas = document.getElementById('ctx');
+	var renla = {};
+	var battleBack = {};
+	createBattleBack(battleBack, 'grass');
+	//createImage(battleBack, 'battle_backs/bg_battle_grass', 0, 0, {}, {xx:0,yy:00,ww:240,hh:160,});
+	
+	createImage(renla, 'evobeasts/spr_renla', 0, 0, evobeastSheetData, evobeastSheetData.idle.up);
+	var WIDTH = 960;
+	var HEIGHT = 640;
+	var STRETCH = 4;
+	ctx.font = '30px Arial';
+	setInterval(update, 60);
+	function update() {
+		ctx.clearRect(0, 0, WIDTH, HEIGHT);
+		drawBattleBack(ctx, battleBack);
+		drawEvobeast(ctx, renla, 'idle', 'down');
+		//ctx.drawImage(battleBack.img, battleBack.x, battleBack.y, battleBack.sheetData.ww, battleBack.sheetData.hh) ;
+	}
+</script>
+</body>
+</html>
