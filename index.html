@@ -17,6 +17,8 @@
 		battleInst.allyTamer.state='attack';
 		battleInst.allyTamer.img.frameCurrent = 0;
 		battleInst.allyTamer.img.imageSpeed = battleInst.allyTamer.img.sheetData[battleInst.allyTamer.state].speed;
+		battleInst.allyTamer.xx = battleInst.enemyEvobeast1.base_x;
+		battleInst.allyTamer.yy = battleInst.enemyEvobeast1.base_y + 8;
 	}
 	var ctx = document.getElementById('ctx').getContext('2d');
 	var canvas = document.getElementById('ctx');
@@ -34,9 +36,7 @@
 	}
 	var battleBack = {};
 	createBattleBack(battleBack, 'grass');
-	//createImage(battleBack, 'battle_backs/bg_battle_grass', 0, 0, {}, {xx:0,yy:00,ww:240,hh:160,});
 	
-	//createImage(renla, 'evobeasts/spr_renla', 0, 0, evobeastSheetData, evobeastSheetData.idle.up);
 	ctx.font = '30px Arial';
 	setInterval(update, 60);
 	function update() {
@@ -45,24 +45,29 @@
 		for (var c in battleInst) {
 			var inst = battleInst[c];
 			if (inst.img.hasOwnProperty('img')) {
-				drawEvobeast(ctx, inst.img, inst.xx, inst.yy, inst.state,inst.dir);
+				drawEvobeast(ctx, inst);
 			}
 		}
 	}
 	var battleInst = {
-		allyTamer:{img:{},xx:104,yy:104,dir:'up',state:'idle'},
-		allyEvobeast1:{img:{},xx:48,yy:104,dir:'up',state:'idle'},
-		allyEvobeast2:{img:{},xx:160,yy:104,dir:'up',state:'idle'},
-		enemyTamer:{img:{},xx:104,yy:32,dir:'down',state:'idle'},
-		enemyEvobeast1:{img:{},xx:48,yy:32,dir:'down',state:'idle'},
-		enemyEvobeast2:{img:{},xx:160,yy:32,dir:'down',state:'idle'},
+		allyTamer:{img:{},xx:104,yy:104,dir:'up'},
+		allyEvobeast1:{img:{},xx:48,yy:104,dir:'up'},
+		allyEvobeast2:{img:{},xx:160,yy:104,dir:'up'},
+		enemyTamer:{img:{},xx:104,yy:32,dir:'down'},
+		enemyEvobeast1:{img:{},xx:48,yy:32,dir:'down'},
+		enemyEvobeast2:{img:{},xx:160,yy:32,dir:'down'},
 	};
+	for (var i in battleInst) {
+		var inst = battleInst[i];
+		inst.base_x = inst.xx;
+		inst.base_y = inst.yy;
+		inst.state = 'idle';
+	}	
 	battleInst.allyTamer.img = evobeastSprites.will_sword;
 	battleInst.allyEvobeast1.img = evobeastSprites.renla;
 	battleInst.allyEvobeast2.img = evobeastSprites.renla;
 	battleInst.enemyEvobeast1.img = evobeastSprites.vespra;
 	battleInst.enemyEvobeast2.img = evobeastSprites.vespra;
-	//function 
 </script>
 </body>
 </html>

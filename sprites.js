@@ -47,8 +47,13 @@ function createBattleBack(myImg, name) {
 function drawBattleBack(ctx, back) {
 	ctx.drawImage(back.img, 0, 0, WIDTH, HEIGHT);
 }
-function drawEvobeast(ctx, image, xx, yy, state, dir) {	
-	image.cycleFrame(image.sheetData[state][dir]);
+function drawEvobeast(ctx, inst) { //image, xx, yy, state, dir) {	
+	cycleFrame(inst);
+	var image = inst.img;
+	var xx = inst.xx;
+	var yy = inst.yy;
+	var state = inst.state;
+	var dir = inst.dir;
 	var sheetX = image.sheetData[state][dir].xx + image.sheetData[state][dir].ww * Math.floor(image.frameCurrent);
 	var sheetY = image.sheetData[state][dir].yy;
 	var sheetW = image.sheetData[state][dir].ww;
@@ -57,6 +62,21 @@ function drawEvobeast(ctx, image, xx, yy, state, dir) {
 	var hh = image.sheetData[state][dir].hh * STRETCH;
 	ctx.drawImage(image.img, sheetX, sheetY, sheetW, sheetH, xx * STRETCH, yy * STRETCH, ww, hh);
 }
+
+function cycleFrame(inst) {
+	inst.img.frameCurrent += inst.img.imageSpeed;
+	var numFrames = inst.img.numFrames;
+	var maxFrames = inst.img.sheetData[inst.state].frames;
+	if (inst.img.frameCurrent >= maxFrames) {
+		inst.img.frameCurrent = 0;
+		if (inst.state != 'idle') {
+			inst.state = 'idle';
+			inst.xx = inst.base_x;
+			inst.yy = inst.base_y;
+		}
+	}
+}
+
 function createImage(myImg, url, xx, yy, sheetData, sheet) {
 	var image = new Image();
 	image.src = 'images/'+url+'.png';
@@ -68,9 +88,6 @@ function createImage(myImg, url, xx, yy, sheetData, sheet) {
 	myImg.frameCurrent = 0;
 	myImg.cycleFrame = function(sheetData) {
 		this.frameCurrent += this.imageSpeed;
-		if (this.frameCurrent >= sheetData.frames) {
-			this.frameCurrent = 0;
-		}
 	}
 	image.onload = function() {
 		ctx.drawImage(image, 0, 0, 32, 32, xx, yy, sheet.ww * 4, sheet.hh * 4);
