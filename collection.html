@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<script src="scripts/collection.js"></script>
+		<script src="scripts/sprites.js"></script>
+		<script src="scripts/elementData.js"></script>
+		<script src="scripts/evobeastData.js"></script>
+		<link href="styles/collection.css" rel="stylesheet" type='text/css'>
+		<link href="styles/mainMenu.css" rel="stylesheet" type='text/css'>
+	</head>
+	<body>
+			<ul class='mainMenu'>
+				<li><a href='collection.html'>collection</a></li>
+				<li><a href='inventory.html'>inventory</a></li>
+				<li><a href='storyMode.html'>story mode</a></li>
+				<li><a href='pvp.html'>pvp</a></li>
+			</ul>
+		</br>
+		<ul id='evobeastList' class='evobeastList'>
+		</ul>
+		<ul id='move'>
+		</ul>
+	<script>
+		var x, y, xShift, yShift;
+		window.onload = function() {
+			var mydiv = document.getElementById('move');
+			window.addEventListener('mousemove', function(event) {
+				x = event.clientX;
+				y = event.clientY;
+				if (typeof x !== 'undefined') {
+					mydiv.style.left = x + xShift + 'px';
+					mydiv.style.top = y + yShift + 'px';
+				}
+			}, false);
+			addListItem({name: 'renla', evobeast: 'renla'});
+			addListItem({name: 'vespra', evobeast: 'vespra'});
+			addListItem({name: 'arost', evobeast: 'arost'});
+			addListItem({name: 'gribble', evobeast: 'gribble'});
+			addListItem({name: 'aurum', evobeast: 'aurum'});
+			addListItem({name: 'ampush', evobeast: 'ampush'});
+			addListItem({name: 'avidal', evobeast: 'avidal'});
+			addListItem({name: 'ignee', evobeast: 'ignee'});
+			addListItem({name: 'dendin', evobeast: 'dendin'});
+			addListItem({name: 'geist', evobeast: 'geist'});
+			addListItem({name: 'gribble', evobeast: 'gribble'});
+			addListItem({name: 'grum', evobeast: 'grum'});
+			addListItem({name: 'gupple', evobeast: 'gupple'});
+			addListItem({name: 'ooga', evobeast: 'ooga'});
+			addListItem({name: 'zorm', evobeast: 'zorm'});
+		};
+	</script>
+	</body>
+</html>

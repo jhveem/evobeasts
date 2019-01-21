@@ -71,7 +71,6 @@ function createBattleAnimation(name, p1, p2) {
 	myImg.yy = yy;
 	myImg.frameCurrent = 0;
 	animations.push(myImg);
-	console.log(myImg);
 }
 function drawBattleBack(ctx, back) {
 	ctx.drawImage(back.img, 0, 0, WIDTH, HEIGHT);
@@ -79,7 +78,6 @@ function drawBattleBack(ctx, back) {
 function drawEvobeast(ctx, inst) { 
 	cycleFrameChar(inst);
 	var image = inst.img;
-	//console.log(inst.img);
 	var xx = inst.xx;
 	var yy = inst.yy;
 	var state = inst.state;
@@ -95,7 +93,6 @@ function drawEvobeast(ctx, inst) {
 function drawAnimation(ctx, inst) { 
 	var image = inst.img;
 	cycleFrameAnimation(inst);
-	console.log(image);
 	var xx = inst.xx;
 	var yy = inst.yy;
 	var sheetX = image.sheetData.xx + image.sheetData.ww * Math.floor(inst.frameCurrent);

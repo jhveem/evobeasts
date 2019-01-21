@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css?family=VT323');
+td, th {
+	background-color: #FFF;
+}
+ul.evobeastList {
+	width: 100%;
+	list-style-type: none;
+	position: relative;
+	user-select: none;
+}
+ul.evobeastList li {
+	display: inline-block;
+	padding: 1%;
+}
+#move {
+	pointer-events: none;
+	position: fixed;
+	user-select: none;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}

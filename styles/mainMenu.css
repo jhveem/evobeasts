@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css?family=VT323');
+body {
+	background-color: #333;
+}
+ul.mainMenu {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #FFF;
+}
+ul.mainMenu li {
+	float: left;
+}
+ul.mainMenu a {
+	font-family: 'VT323', monospace;
+	text-transform: uppercase;
+	display: block;
+	padding: 8px;
+	background-color: #FFF;
+	text-align: center;
+	color: #000;
+	text-decoration: none;
+}
