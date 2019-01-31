@@ -1,0 +1,38 @@
+.evobeastData {
+	font-family: 'VT323', monospace;
+	text-transform: uppercase;
+	margin: 5px;
+	padding: 0;
+	width: 100%;
+	display: inline;
+}
+h1.evobeastData {
+	font-size: 40px;
+}
+p.evobeastData, span.evobeastData {
+	font-size: 24px;
+}
+#evobeastSprite {
+	image-rendering: crisp-edges;
+}
+.progressBar {
+	margin: 20px, 0, 0, 0;
+	padding: 0;
+	display: inline-block;
+	width: 200px;
+	background-color: #444;
+}
+.progressBarFill {
+	width: 1%;
+	height: 24px;
+}
+#xpBar {
+	background-color: #4C6;
+}
+#healthBar {
+	background-color: #C64;
+}
+#manaBar {
+	background-color: #46C;
+}
+

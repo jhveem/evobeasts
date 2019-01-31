@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<script src="/evobeasts/scripts/sprites.js"></script>
+		<link href="/evobeasts/styles/mainMenu.css" rel="stylesheet" type='text/css'>
+		<link href="/evobeasts/styles/stats.css" rel="stylesheet" type='text/css'>
+		<title>EVOBEASTS</title>
+<style>
+</style>
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-lg navbar-light">
+			<div class="navbar-header">
+			<a class="navbar-brand" href="/index.html">EVOBEASTS</a>
+			</div>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav">
+					<li class="nav-item"><a class="nav-link" href='collection.html'>collection</a></li>
+					<li class="nav-item active"><a class="nav-link" href='inventory.html'>inventory</a></li>
+					<li class="nav-item"><a class="nav-link" href='storyMode.html'>story mode</a></li>
+					<li class="nav-item"><a class="nav-link" href='pvp.html'>pvp</a></li>
+				</ul>
+			</div>
+		</nav>
+		<div class="data-block" style="height: 100%; padding:0px; float: left;">
+			<canvas id="evobeastSprite" width="192" height="192"></canvas>
+		</div>
+		<div class="data-block">
+			<h1 class="evobeastData" id="evobeastName"></h1>
+			<p class="evobeastData" id="evobeastLevel"></p>
+			<br>
+			<p class="evobeastData" >magic</p>
+		</div>
+		<div class="data-block">
+			<p class="evobeastData" id="evobeastxp"></p>
+			<div class="progressBar ">
+				<div class="progressBarFill" id="xpBar"></div>
+			</div>
+		</div>
+		<div class="data-block">
+			<p class="evobeastData" id="evobeastRune1"></p>
+			<p class="evobeastData" id="evobeastRune2"></p>
+		</div>
+		<div class="data-block">
+			<p class="evobeastData" id="evobeasthp"></p>
+			<div class="progressBar">
+				<div class="progressBarFill" id="healthBar"></div>
+			</div>
+			<p class="evobeastData" id="evobeastmp"></p>
+			<div class="progressBar">
+				<div class="progressBarFill" id="manaBar"></div>
+			</div>
+		</div>
+		<div class="data-block">
+			<div id="evobeastBaseStats"></div>
+		</div>
+		<div class="data-block">
+			<p></p>
+		</div>
+	<script>
+		var img = new Image();
+		var canvas = document.getElementById("evobeastSprite");
+		var ctx = canvas.getContext('2d');
+		var evobeast = 'renla';
+		var data = {name: 'renla', evobeast: 'renla', level: 1, rune1: 'power rune', rune2: 'hardy rune', hp: 100, hpCur: 80, mp: 10, mpCur: 10, xpCur: 10, str: 5, intel: 5, def: 5, mdef: 5, spd: 5};
+		ctx.imageSmoothingEnabled = false;
+		img.src = 'images/evobeasts/spr_'+data.evobeast+'_large.png';
+		var spr = sprite({
+			width: 64,
+			height: 64,
+			stretch: 3,
+			image: img,
+			context: ctx,
+		});
+		spr.init();
+		document.getElementById("evobeastName").innerHTML = data.name;
+		document.getElementById("evobeastLevel").innerHTML = "Level: " + data.level;
+		document.getElementById("evobeastRune1").innerHTML = data.rune1;
+		document.getElementById("evobeastRune2").innerHTML = data.rune2;
+		document.getElementById("evobeasthp").innerHTML = "HP: " + data.hpCur+ "/" + data.hp;
+		document.getElementById("healthBar").style.width = data.hpCur / data.hp * 100 + "%";
+		document.getElementById("evobeastmp").innerHTML = "MP: " + data.mpCur+ "/" + data.mp;
+		document.getElementById("manaBar").style.width = data.mpCur / data.mp* 100 + "%";
+		document.getElementById("evobeastxp").innerHTML = "XP: " + data.xpCur+ "/" + calcRequiredXp(data.level);
+		document.getElementById("xpBar").style.width = data.xpCur / calcRequiredXp(data.level) * 100 + "%";
+		var baseStatNames = ['str', 'intel', 'def', 'mdef', 'spd']
+		var statDiv = document.getElementById("evobeastBaseStats");
+		for (var  i in baseStatNames) {
+			var stat = baseStatNames[i];
+			var p = document.createElement('p');
+			p.innerHTML = stat + ": " + data[stat];
+			p.className = 'evobeastData';
+			statDiv.appendChild(p);
+		}
+		function calcRequiredXp(level) {
+			var reqxp = level * 100;
+			return reqxp;
+		}
+	</script>
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	</body>
+</html>
+

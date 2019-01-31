@@ -1,4 +1,4 @@
-var evobeastData = {
+var charData = {
 	will_sword: {
 	},
 	renla: {

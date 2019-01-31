@@ -1,7 +1,10 @@
 <html>
 <head>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<script src='sprites.js'></script>
-	<script src='scripts/evobeastData.js'></script>
+	<script src='/evobeasts/scripts/charData.js'></script>
+	<script src='/evobeasts/scripts/sprites.js'></script>
+	<script src='/evobeasts/scripts/sheetData.js'></script>
 	<style>
 	canvas {
 		image-rendering: pixelated;
@@ -15,70 +18,84 @@
 	<link href="styles/mainMenu.css" rel="stylesheet" type='text/css'>
 </head>
 <body>
-	<ul class='mainMenu'>
-		<li><a href='collection.html'>collection</a></li>
-		<li><a href='inventory.html'>inventory</a></li>
-		<li><a href='storyMode.html'>story mode</a></li>
-		<li><a href='pvp.html'>pvp</a></li>
-	</ul>
-<canvas id='ctx' style='border:1px solid #000000;'></canvas>
-<button onclick='attack()'>Click</button>
-<script>
-	function attack() {
-		battleInst.allyTamer.state='attack';
-		battleInst.allyTamer.img.frameCurrent = 0;
-		battleInst.allyTamer.img.imageSpeed = battleInst.allyTamer.img.sheetData[battleInst.allyTamer.state].speed;
-		battleInst.allyTamer.xx = battleInst.enemyEvobeast1.base_x;
-		battleInst.allyTamer.yy = battleInst.enemyEvobeast1.base_y + 8;
-	}
-	var ctx = document.getElementById('ctx').getContext('2d');
-	var canvas = document.getElementById('ctx');
-	var renla = {};
-	var WIDTH = 960;
-	var HEIGHT = 640;
-	var STRETCH = 4;
-	var evobeastSprites = {};
-	canvas.width = WIDTH;
-	canvas.height = HEIGHT;
-	ctx.imageSmoothingEnabled = false;
-	for (var e in evobeastData) {
-		evobeastSprites[e] = {};
-		createImage(evobeastSprites[e], 'evobeasts/'+e, evobeastSheetData);
-	}
-	var battleBack = {};
-	createBattleBack(battleBack, 'grass');
-	
-	ctx.font = '30px Arial';
-	setInterval(update, 60);
-	function update() {
-		ctx.clearRect(0, 0, WIDTH, HEIGHT);
-		drawBattleBack(ctx, battleBack);
-		for (var c in battleInst) {
-			var inst = battleInst[c];
-			if (inst.img.hasOwnProperty('img')) {
-				drawEvobeast(ctx, inst);
+		<nav class="navbar navbar-expand-lg navbar-light">
+			<div class="navbar-header">
+			<a class="navbar-brand" href="/evobeasts/index.html">EVOBEASTS</a>
+			</div>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav">
+					<li class="nav-item"><a class="nav-link" href='/evobeasts/collection.html'>collection</a></li>
+					<li class="nav-item"><a class="nav-link" href='/evobeasts/inventory.html'>inventory</a></li>
+					<li class="nav-item"><a class="nav-link" href='/evobeasts/storyMode.html'>story mode</a></li>
+					<li class="nav-item active"><a class="nav-link" href='/evobeasts/pvp.html'>pvp</a></li>
+				</ul>
+			</div>
+		</nav>
+	<br>
+	<canvas id='ctx' style='border:1px solid #000000;'></canvas>
+	<button onclick='attack()'>Click</button>
+	<script>
+		var ctx = document.getElementById('ctx').getContext('2d');
+		var canvas = document.getElementById('ctx');
+		var WIDTH = 960;
+		var HEIGHT = 640;
+		var STRETCH = 4;
+		canvas.width = WIDTH;
+		canvas.height = HEIGHT;
+		ctx.imageSmoothingEnabled = false;
+		var battleBack = createBattleBack('grass'); 
+		
+		var battleInst = {};
+		battleInst.a1 = createInst(48, 104, 'renla'); 
+		battleInst.a1.dir = 'up';
+		battleInst.at = createInst(104, 104, 'will_sword'); 
+		battleInst.at.dir = 'up';
+		battleInst.a2 = createInst(160, 104, 'renla'); 
+		battleInst.a2.dir = 'up';
+		battleInst.e1= createInst(48, 32, 'vespra'); 
+		//battleInst.et= createInst(104, 32, 'will_sword'); 
+		battleInst.e2= createInst(160, 32, 'vespra'); 
+
+		ctx.font = '30px Arial';
+		setInterval(update, 60);
+		function update() {
+			ctx.clearRect(0, 0, WIDTH, HEIGHT);
+			battleBack.render();
+			for (var  i in battleInst) { 
+				var bInst= battleInst[i];
+				bInst.draw();
 			}
 		}
-	}
-	var battleInst = {
-		allyTamer:{img:{},xx:104,yy:104,dir:'up'},
-		allyEvobeast1:{img:{},xx:48,yy:104,dir:'up'},
-		allyEvobeast2:{img:{},xx:160,yy:104,dir:'up'},
-		enemyTamer:{img:{},xx:104,yy:32,dir:'down'},
-		enemyEvobeast1:{img:{},xx:48,yy:32,dir:'down'},
-		enemyEvobeast2:{img:{},xx:160,yy:32,dir:'down'},
-	};
-	for (var i in battleInst) {
-		var inst = battleInst[i];
-		inst.base_x = inst.xx;
-		inst.base_y = inst.yy;
-		inst.state = 'idle';
-	}	
-	battleInst.allyTamer.img = evobeastSprites.will_sword;
-	battleInst.allyEvobeast1.img = evobeastSprites.renla;
-	battleInst.allyEvobeast2.img = evobeastSprites.renla;
-	battleInst.enemyEvobeast1.img = evobeastSprites.vespra;
-	battleInst.enemyEvobeast2.img = evobeastSprites.vespra;
-</script>
+		var charList = {}; 
+		charList['renla'] = createCharSprites('renla');	
+		charList['will_sword'] = createCharSprites('will_sword');	
+		charList['vespra'] = createCharSprites('vespra');	
+		function createInst(x, y, name) {
+			var myInst = inst({x: x, y: y, name: name});
+			return myInst;
+		}
+		function inst(options) {
+			var that = {};
+			that.x = options.x;
+			that.y = options.y;
+			that.name = options.name;
+			that.state = options.state || 'idle';
+			that.dir = options.dir || 'down';
+			that.draw = function(state, dir) {
+				var state = state || that.state;
+				var dir = dir || that.dir;
+				var spr = charList[that.name][state][dir];
+				spr.render(that.x * STRETCH, that.y * STRETCH);
+			}
+			return that;
+		}
+
+	</script>
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </body>
 </html>

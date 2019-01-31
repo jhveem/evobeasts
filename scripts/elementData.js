@@ -43,10 +43,10 @@ var elementData = {
 	},
 
 	metal: {
-		hex: '#AAA',
+		hex: '#999',
 	},
 	none: {
-		hex: '#CCC',
+		hex: '#DDD',
 	},
 
 };

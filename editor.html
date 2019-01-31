@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src='scripts/sprites.js'></script>
+		<script src='scripts/editor.js'></script>
+		<style>
+		ul {
+			list-style-type: none;
+		}
+		</style>
+	</head>
+	<body>
+		<canvas id='mapEditor' width='640' height='640' style='background-color: black;'></canvas>
+		<br>
+		<select id="background" onchange="setBackgroundValue()"><option></option></select>
+		<select id="placementCategories" onchange="setPlacementOptions()"><option></option></select>
+		<select id="placementOptions"><option></option></select>
+		<script>
+			var mapWidth = 20;
+			var mapHeight = 20;
+			var GRID_SIZE = 16;
+			var STRETCH = 2;
+			var STRETCH_GRID = GRID_SIZE * STRETCH;
+			var grids = {}
+			var canvas = document.getElementById('mapEditor');
+			var WIDTH = 640;
+			var HEIGHT = 640;
+			var x_shift = 0;
+			var y_shift = 0;
+			var ctx = canvas.getContext('2d');
+			ctx.imageSmoothingEnabled = false;
+			var canvasClick = false;
+			var shiftDown = false;
+			var background = '';
+			canvas.onmousedown = function(e) {
+				canvasClick = true;
+				setGridValue(e);
+			}
+			canvas.onmouseup = function() {
+				canvasClick = false;
+			}
+			canvas.onmousemove = function (e) {
+				setGridValue(e);
+			}
+			function setGridValue(e) {
+				if (!e) e = window.event;
+				if (canvasClick == true) {
+					var rect = canvas.getBoundingClientRect();
+					var originX = event.clientX - rect.left;
+					var originY = event.clientY - rect.top;
+					var gridX = Math.floor(originX / (STRETCH * GRID_SIZE));
+					var gridY = Math.floor(originY / (STRETCH * GRID_SIZE));
+					if (gridX < mapWidth && gridY < mapHeight) {
+						var category = document.getElementById('placementCategories').value;
+						var option = document.getElementById('placementOptions').value;
+						if (e.shiftKey) {
+							grids[category][gridX][gridY] = '';
+						} else {
+							grids[category][gridX][gridY] = option;
+						}
+					}
+				}
+			}
+			grids.tile = [];
+			grids.tileset = [];
+			for (var i = 0; i < mapWidth; i += 1) {
+				for (var g in grids) {
+					grids[g][i] = [];
+				}
+				for (var j = 0; j < mapHeight; j += 1) {
+					for (var g in grids) {
+						grids[g][i][j] = '';
+					}
+				}
+			}
+			setInterval(update, 60);
+			function update() {
+				ctx.clearRect(0, 0, WIDTH, HEIGHT);
+				for (var xx = 0; xx < mapWidth; xx += 1) {
+					for (var yy = 0; yy < mapHeight; yy += 1) {
+						if (background != '') {
+							tiles[background].render(xx * STRETCH_GRID, yy * STRETCH_GRID);
+						}
+						var tile = grids.tile[xx][yy];
+						var tileset = grids.tileset[xx][yy];
+						if (tile != '') {
+							tiles[tile].render(xx * STRETCH_GRID, yy * STRETCH_GRID);
+						}
+						if (tileset != '') {
+							renderTileSet(tileset, xx, yy);
+						}
+					}
+				}
+			};
+			var tiles = {};
+			var tilesets = {};
+			tiles.grass = createTileSprite('grass'); 
+			tiles.water = createTileSprite('water'); 
+			
+			tilesets.grass_water = createTileSheet('grass_water');
+			tilesets.grass_dirt = createTileSheet('grass_dirt');
+
+			//change values
+			//set up the selection lists
+			for (var i in tiles) {
+				var option = document.createElement('option');
+				option.innerHTML = i;
+				var list = document.getElementById('background');
+				list.appendChild(option);
+			}
+			for (var i in grids) {
+				var option = document.createElement('option');
+				option.innerHTML = i;
+				var list = document.getElementById('placementCategories');
+				list.appendChild(option);
+			}
+			var grass_water = createTileSheet('grass_water');
+		</script>
+	</body>
+</html>
