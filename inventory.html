@@ -1,13 +1,13 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 	<head>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-		<script src="/scripts/collection.js"></script>
+		<script src="/scripts/inventory.js"></script>
 		<script src="/scripts/sprites.js"></script>
 		<script src="/scripts/elementData.js"></script>
-		<script src="/scripts/charData.js"></script>
-		<link href="/styles/collection.css" rel="stylesheet" type='text/css'>
+		<script src="/scripts/itemData.js"></script>
 		<link href="/styles/mainMenu.css" rel="stylesheet" type='text/css'>
+		<link href="/styles/inventory.css" rel="stylesheet" type='text/css'>
 		<title>EVOBEASTS</title>
 	</head>
 	<body>
@@ -20,17 +20,17 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav">
-					<li class="nav-item active"><a class="nav-link" href='/collection.html'>collection</a></li>
-					<li class="nav-item"><a class="nav-link" href='/inventory.html'>inventory</a></li>
+					<li class="nav-item"><a class="nav-link" href='/collection.html'>collection</a></li>
+					<li class="nav-item active"><a class="nav-link" href='/inventory.html'>inventory</a></li>
 					<li class="nav-item"><a class="nav-link" href='/storyMode.html'>story mode</a></li>
 					<li class="nav-item"><a class="nav-link" href='/pvp.html'>pvp</a></li>
 				</ul>
 			</div>
 		</nav>
-		<ul id='evobeastList' class='evobeastList'>
-		</ul>
-		<ul id='move'>
-		</ul>
+		<div id='inventory' class='inventory'>
+		</div>
+		<div id='move' class='inventory mover'>
+		</div>
 	<script>
 		var x, y, xShift, yShift;
 		window.onload = function() {
@@ -43,26 +43,10 @@
 					mydiv.style.top = y + yShift + 'px';
 				}
 			}, false);
-			addListItem({name: 'renla', evobeast: 'renla'});
-			addListItem({name: 'reowe', evobeast: 'reowe'});
-			addListItem({name: 'renemar', evobeast: 'renemar'});
-			addListItem({name: 'rengeier', evobeast: 'rengeier'});
-			addListItem({name: 'renange', evobeast: 'renange'});
-			addListItem({name: 'renwyrm', evobeast: 'renwyrm'});
-			addListItem({name: 'rensilken', evobeast: 'rensilken'});
-			addListItem({name: 'vespra', evobeast: 'vespra'});
-			addListItem({name: 'arost', evobeast: 'arost'});
-			addListItem({name: 'gribble', evobeast: 'gribble'});
-			addListItem({name: 'aurum', evobeast: 'aurum'});
-			addListItem({name: 'ampush', evobeast: 'ampush'});
-			addListItem({name: 'avidal', evobeast: 'avidal'});
-			addListItem({name: 'ignee', evobeast: 'ignee'});
-			addListItem({name: 'dendin', evobeast: 'dendin'});
-			addListItem({name: 'geist', evobeast: 'geist'});
-			addListItem({name: 'grum', evobeast: 'grum'});
-			addListItem({name: 'gupple', evobeast: 'gupple'});
-			addListItem({name: 'ooga', evobeast: 'ooga'});
-			addListItem({name: 'zorm', evobeast: 'zorm'});
+			addListItem({item: 'potion', quantity: 2});
+			addListItem({item: 'ring', quantity: 2});
+			addListItem({item: 'grand_potion', quantity: 2});
+			addListItem({item: 'ring', quantity: 2});
 		};
 	</script>
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

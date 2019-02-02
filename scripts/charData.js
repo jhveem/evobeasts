@@ -1,15 +1,16 @@
 var charData = {
 	will_sword: {
+		family: 'will',
 	},
 
 	renla: {
 		element1: 'magic',
-		evol: {'reowe', 'renange'},
+		evol: ['reowe', 'renange'],
 		family: 'renla',
 	},
 	reowe: {
 		element1: 'magic',
-		evol: {'renemar', 'rengeier'},
+		evol: ['renemar', 'rengeier'],
 		family: 'renla',
 	},
 	renemar: {
@@ -23,7 +24,7 @@ var charData = {
 	},
 	renange: {
 		element1: 'magic',
-		evol: {'renwyrm', 'rensilken'},
+		evol: ['renwyrm', 'rensilken'],
 		family: 'renla',
 	},
 	renwyrm: {
@@ -38,12 +39,12 @@ var charData = {
 
 	vespra: {
 		element1: 'shadow',
-		evol: {'vesgis','vesrax'},
+		evol: ['vesgis','vesrax'],
 		family: 'vespra',
 	},
 	vesgis: {
 		element1: 'shadow',
-		evol: {'vespiborus','vesdra'},
+		evol: ['vespiborus','vesdra'],
 		family: 'vespra',
 	},
 	vespiborus: {
@@ -57,7 +58,7 @@ var charData = {
 	vesrax: {
 		element1: 'shadow',
 		element2: 'air',
-		evol: {'vequila', 'vespiter'},
+		evol: ['vequila', 'vespiter'],
 		family: 'vespra',
 	},
 	vesquila: {
@@ -72,9 +73,9 @@ var charData = {
 	},
 	
 	lilger: {
-		family: '',
+		family: 'lilger',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 
@@ -86,7 +87,7 @@ var charData = {
 	onera: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	gupple: {
@@ -97,62 +98,62 @@ var charData = {
 	gortle: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	pippup: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	leppy: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	quilly: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	dratty: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	
 	simmie: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	urso: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	fawly: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	gidd: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	vulpun: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	ignee: {
@@ -167,13 +168,13 @@ var charData = {
 	mantum: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	gylar: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	avidal: {
@@ -184,31 +185,31 @@ var charData = {
 	spean: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	snoguin: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	garodile: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	ripsies: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	nautapod: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	gribble: {
@@ -219,7 +220,7 @@ var charData = {
 	seenum: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	ampush: {
@@ -230,31 +231,31 @@ var charData = {
 	keetle: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	larval: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	cenidae: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	lurion: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	repling: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	dendin: {
@@ -265,37 +266,37 @@ var charData = {
 	cirmus: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	rumaf: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	mammid: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	calvine: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	luska: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	lilgant: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	grum: {
@@ -306,7 +307,7 @@ var charData = {
 	chaly: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	aurum: {
@@ -322,13 +323,13 @@ var charData = {
 	musset: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	nykla: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 
 	},
 	
@@ -341,73 +342,73 @@ var charData = {
 	luxie: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	umbrix: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	gremmy: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	lunas: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	waki: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	basigon: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	wrym: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	automa: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	quark: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	phyrant: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	djinn: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 	
 	gigera: {
 		family: '',
 		element1: '',
-		evol: {},
+		evol: [],
 	},
 
 }

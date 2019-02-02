@@ -1,45 +1,32 @@
 function createListItem(data, moveable) {
-	var list = document.getElementById('evobeastList');
-	var li = document.createElement('li');
+	var list = document.getElementById('inventory');
+	var li = document.createElement('inventory-item');
 	var img = new Image();
 	var canvas = document.createElement('canvas');
-	canvas.width = 64;
-	canvas.height = 64;
+	canvas.width = 32;
+	canvas.height = 32;
 	canvas.style.padding = 0;
 	canvas.style.margin= 0;
 	var ctx = canvas.getContext('2d');
 	ctx.imageSmoothingEnabled = false;
-	var element1 = charData[data.evobeast].element1;
-	var element2 = charData[data.evobeast].element2;
-	if (element2 == undefined){
-		element2 = element1;
-	}
-	console.log(element1);
-	console.log(element2);
-	var bgColor1 = elementData[element1].hex;
-	var bgColor2 = elementData[element2].hex;
-	data.level = 99;
-	data.hp = 9999;
-	data.mp = 99;
-	var bgHtml = 'background: linear-gradient(to bottom right, '+bgColor1+' 0%,'+bgColor1+' 50%,'+bgColor2+' 50%,'+bgColor2+' 100%);'
-	var html = `<div class="evobeast-container" style="`+bgHtml+`">
-		<div class="evobeast-img"></div>
-		<div class="evobeast-item evobeast-name">`+data.name+`</div>
-		<div class="evobeast-item">L. `+data.level+`</div>
-		<div class="evobeast-item">HP: `+data.hp+`</div>
-		<div class="evobeast-item">MP: `+data.mp+`</div>
+	var description = itemData[data.item].description;
+	var name = data.item.replace("_", " ");
+
+	var html = `<div class="item-container"> 
+		<div class="item-img"></div>
+		<div class="item-item">`+name+`</div>
+		<div class="item-description item-item">`+description+`</div>
+		<div class="item-item">`+data.quantity+`</div>
 	</div>`;
 
 	li.innerHTML = html;
-	var cell = li.getElementsByClassName('evobeast-img');
+	var cell = li.getElementsByClassName('item-img');
 	cell[0].appendChild(canvas);
-	var family = charData[data.evobeast].family;
-	img.src = '/images/evobeasts/'+family+'/'+data.evobeast+'.png';
-	console.log(img.src);
+	img.src = '/images/items/'+data.item+'.png';
 	spr = sprite({
-		width: 64,
-		height: 64,
-		stretch: 1,
+		width: 32,
+		height: 32,
+		stretch: 2,
 		image: img,
 		context: ctx,
 	});
@@ -48,22 +35,18 @@ function createListItem(data, moveable) {
 		li.onmouseup = function(){insertList(li.id);};
 		canvas.onmousedown = function(){grabListItem(li.id);};
 	}
-	tds = li.getElementsByTagName('td');
-	for (td in tds) {
-		tds[td].onmousedown = function() {window.location.href = 'evobeastStats.html';};
-	}
 	li.data = data;
 	return li;
 }
 function addListItem(data) {
-	var list = document.getElementById('evobeastList');
+	var list = document.getElementById('inventory');
 	var li = createListItem(data, true);
 	list.appendChild(li);
 	setListIds();
 }
 function setListIds() {
-	var list = document.getElementById('evobeastList');
-	var lis = list.getElementsByTagName('li');
+	var list = document.getElementById('inventory');
+	var lis = list.getElementsByTagName('inventory-item');
 	for (var  i = 0; i < lis.length; ++i) {
 		var li = lis[i];
 		li.id = ''+i;
@@ -88,7 +71,7 @@ function returnListItem() {
 	var myId = move.id;
 }
 function grabListItem(myId) {
-	if (document.getElementById('move').getElementsByTagName('li').length == 0) {
+	if (document.getElementById('move').getElementsByTagName('inventory-item').length == 0) {
 		var moveDiv = document.getElementById('move');
 		var item = document.getElementById(myId);
 		var moveItem = createListItem(item.data, false); 

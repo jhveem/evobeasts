@@ -95,7 +95,8 @@ function createCharSprites(name) {
 	var returnData = {};
 	var dirs = ['up', 'down'];
 	var image = new Image();
-	image.src = 'images/evobeasts/'+name+'.png';
+	var family = charData[name].family;
+	image.src = 'images/evobeasts/'+family+'/'+name+'_sheet.png';
 	for (var i in charSheetData) {
 		returnData[i] = {};
 		for (var dir in dirs) {

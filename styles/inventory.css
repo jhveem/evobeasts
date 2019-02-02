@@ -2,13 +2,13 @@
 td, th {
 	background-color: #FFF;
 }
-ul.evobeastList {
+ul.inventory {
 	width: 100%;
 	list-style-type: none;
 	position: relative;
 	user-select: none;
 }
-ul.evobeastList li {
+ul.inventory li {
 	display: inline-block;
 	padding: 1%;
 }
@@ -20,37 +20,39 @@ ul.evobeastList li {
 	margin: 0;
 	padding: 0;
 }
-.charData {
-	border-radius: 5px; !important
-	border-spacing:0; !important 
-	margin: 10px; !important	
-	padding: 10px; !important
+.inventory {
+	display: grid;
+	grid-gap: 10px;
+	padding: 10px;
+	grid-template-columns: 1fr 1fr;
 }
-.evobeast-container {
+.mover {
+	grid-template-columns: auto;
+}
+.item-container {
 	display: grid;
 	grid-gap: 10px 10px;
 	padding: 10px;
-	grid-template-columns: auto auto auto;
-	grid-template-rows: auto auto;
+	grid-template-columns: 32px 150px 1fr 32px;
 	border-radius: 5px;
 	box-shadow: 5px 5px 5px;
-	
-
+	background-color: #DDD;	
+	user-select: none;
 }
-.evobeast-item, .evobeast-img{
-	background-color: #FFF;
-}
-.evobeast-name {
-	width: 100px;
-}
-.evobeast-item {
+.item-item {
+	margin: 0px;
 	padding: 0px 10px 0px 10px;
 	font-family: 'VT323', monospace;
 	text-transform: uppercase;
 	font-size: 20px;
 }
-.evobeast-img {
-	grid-row-start: 1;
-	grid-row-end: 3;
-	height: 64px; !important
+.item-item, .item-img, .item-description {
+	background-color: #FFF;
+	vertical-align: middle;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.item-description {
+	justify-content: left;
 }
