@@ -12,46 +12,56 @@ function setPlacementOptions() {
 	if (category == 'tileset') {
 		group = tilesets;
 	}
+	if (category == 'wall') {
+		group = walls;
+	}
+	var list = document.getElementById('placementOptions');
+	while (list.childNodes[0]) {
+		list.removeChild(list.childNodes[0]);
+	}
+	var option = document.createElement('option');
+	option.innerHTML = '';
+	list.appendChild(option);
 	for (var i in group) {
-		var list = document.getElementById('placementOptions');
 		var option = document.createElement('option');
 		option.innerHTML = i;
 		list.appendChild(option);
 	}
 }
-function renderTileSet(tileset, xx, yy) {
-	var tilesprite = tilesets[tileset]; 
+function getAdjacentData(name, gridName, xx, yy) {
+	var data = {};
+	var grid = grids[gridName];
 	var u = false;
 	if (yy > 0) {
-		var u = grids.tileset[xx][yy - 1] == tileset;
+		var u = grid[xx][yy - 1] == name;
 	}
 	var d = false;
 	if (yy < mapHeight - 1) {
-		var d = grids.tileset[xx][yy + 1] == tileset;
+		var d = grid[xx][yy + 1] == name;
 	}
 	var l = false;
 	if (xx > 0) {
-		var l = grids.tileset[xx - 1][yy] == tileset;
+		var l = grid[xx - 1][yy] == name;
 	}
 	var r = false;
 	if (xx < mapWidth - 1) {
-		var r = grids.tileset[xx + 1][yy] == tileset;
+		var r = grid[xx + 1][yy] == name;
 	}
 	var ul = false;
 	if (yy > 0 && xx > 0) {
-		var ul = grids.tileset[xx -1][yy - 1] == tileset;
+		var ul = grid[xx -1][yy - 1] == name;
 	}
 	var ur = false;
 	if (yy > 0 && xx < mapWidth - 1) {
-		var ur = grids.tileset[xx + 1][yy - 1] == tileset;
+		var ur = grid[xx + 1][yy - 1] == name;
 	}
 	var dl = false;
 	if (yy < mapHeight - 1 && xx > 0) {
-		var dl = grids.tileset[xx -1][yy + 1] == tileset;
+		var dl = grid[xx -1][yy + 1] == name;
 	}
 	var dr = false;
 	if (yy < mapHeight - 1 && xx < mapWidth - 1) {
-		var dr = grids.tileset[xx + 1][yy + 1] == tileset;
+		var dr = grid[xx + 1][yy + 1] == name;
 	}
 	var sx = {ul: 0, dl: 0, ur: 0, dr: 0};
 	var sy = {ul: 0, dl: 0, ur: 0, dr: 0};
@@ -124,11 +134,41 @@ function renderTileSet(tileset, xx, yy) {
 		sx.dr = 16;
 		sy.dr = 16;
 	}
-	console.log(sx);
-	console.log(sy);
-	tilesprite.renderPart(xx * STRETCH_GRID, yy * STRETCH_GRID, sx.ul, sy.ul, 8, 8);
-	tilesprite.renderPart(xx * STRETCH_GRID + 8 * STRETCH, yy * STRETCH_GRID, sx.ur + 8, sy.ur, 8, 8);
-	tilesprite.renderPart(xx * STRETCH_GRID, yy * STRETCH_GRID + 8 * STRETCH, sx.dl, sy.dl + 8, 8, 8);
-	tilesprite.renderPart(xx * STRETCH_GRID + 8 * STRETCH, yy * STRETCH_GRID + 8 * STRETCH, sx.dr + 8, sy.dr + 8, 8, 8);
-
+	data.sx = sx;
+	data.sy = sy;
+	return data;
+}
+function renderWallSet(name, cx, cy, xx, yy) {
+	var sprite = walls[name]; 
+	var data = getAdjacentData(name, 'wall', xx, yy);
+	var sx = data.sx;
+	var sy = data.sy;
+	renderSet(sprite, cx, cy, sx, sy);
+}
+function renderWallFace(name, cx, cy) {
+	var sprite = walls[name];
+	var sx = {};
+	var sy = {};
+	sx.dr = 0;
+	sx.dl = 0;
+	sx.ur = 0;
+	sx.ul = 0;
+	sy.dr = 16;
+	sy.dl = 16;
+	sy.ur = 16;
+	sy.ul = 16;
+	renderSet(sprite, cx, cy, sx, sy);
+}
+function renderTileSet(tileset, cx, cy, xx, yy) {
+	var tilesprite = tilesets[tileset]; 
+	var data = getAdjacentData(tileset, 'tileset', xx, yy);
+	var sx = data.sx;
+	var sy = data.sy;
+	renderSet(tilesprite, cx, cy, sx, sy);
+}
+function renderSet(sprite, cx, cy, sx, sy) {
+	sprite.renderPart(cx * STRETCH_GRID, cy * STRETCH_GRID, sx.ul, sy.ul, 8, 8);
+	sprite.renderPart(cx * STRETCH_GRID + 8 * STRETCH, cy * STRETCH_GRID, sx.ur + 8, sy.ur, 8, 8);
+	sprite.renderPart(cx * STRETCH_GRID, cy * STRETCH_GRID + 8 * STRETCH, sx.dl, sy.dl + 8, 8, 8);
+	sprite.renderPart(cx * STRETCH_GRID + 8 * STRETCH, cy * STRETCH_GRID + 8 * STRETCH, sx.dr + 8, sy.dr + 8, 8, 8);
 }

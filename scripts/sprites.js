@@ -74,6 +74,13 @@ function createTileSprite(name, ww, hh) {
 	var spr = createSprite(src, ww, hh);
 	return spr;
 }
+function createWallSheet(name, ww, hh) {
+	var ww = ww || 32;
+	var hh = hh || 48;
+	var src = 'images/tiles/walls/'+name+'.png';
+	var spr = createSprite(src, ww, hh);
+	return spr;
+}
 function createTileSheet(name, ww, hh) {
 	var ww = ww || 32;
 	var hh = hh || 48;

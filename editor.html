@@ -15,9 +15,10 @@
 		<select id="background" onchange="setBackgroundValue()"><option></option></select>
 		<select id="placementCategories" onchange="setPlacementOptions()"><option></option></select>
 		<select id="placementOptions"><option></option></select>
+		<button onclick="fillGrid()">FILL</button>
 		<script>
-			var mapWidth = 20;
-			var mapHeight = 20;
+			var mapWidth = 40;
+			var mapHeight = 40;
 			var GRID_SIZE = 16;
 			var STRETCH = 2;
 			var STRETCH_GRID = GRID_SIZE * STRETCH;
@@ -42,14 +43,39 @@
 			canvas.onmousemove = function (e) {
 				setGridValue(e);
 			}
+			window.onkeydown = function(e) {
+				var key = e.keyCode ? e.keyCode : e.which;
+				//left key
+				if (key == 37) {
+					x_shift += 1;
+				}
+				if (key == 38) {
+					y_shift += 1;
+				}
+				if (key == 39) {
+					x_shift -= 1;
+				}
+				if (key == 40) {
+					y_shift -= 1;
+				}
+			}
+			function fillGrid() {
+				var category = document.getElementById('placementCategories').value;
+				var option = document.getElementById('placementOptions').value;
+				for (var i = 0; i < mapWidth; i += 1) {
+					for (var j = 0; j < mapHeight; j += 1) {
+						grids[category][i][j] = option;
+					}
+				}
+			}
 			function setGridValue(e) {
 				if (!e) e = window.event;
 				if (canvasClick == true) {
 					var rect = canvas.getBoundingClientRect();
 					var originX = event.clientX - rect.left;
 					var originY = event.clientY - rect.top;
-					var gridX = Math.floor(originX / (STRETCH * GRID_SIZE));
-					var gridY = Math.floor(originY / (STRETCH * GRID_SIZE));
+					var gridX = Math.floor(originX / (STRETCH * GRID_SIZE)) + x_shift;
+					var gridY = Math.floor(originY / (STRETCH * GRID_SIZE)) + y_shift;
 					if (gridX < mapWidth && gridY < mapHeight) {
 						var category = document.getElementById('placementCategories').value;
 						var option = document.getElementById('placementOptions').value;
@@ -63,6 +89,7 @@
 			}
 			grids.tile = [];
 			grids.tileset = [];
+			grids.wall = [];
 			for (var i = 0; i < mapWidth; i += 1) {
 				for (var g in grids) {
 					grids[g][i] = [];
@@ -76,29 +103,47 @@
 			setInterval(update, 60);
 			function update() {
 				ctx.clearRect(0, 0, WIDTH, HEIGHT);
-				for (var xx = 0; xx < mapWidth; xx += 1) {
-					for (var yy = 0; yy < mapHeight; yy += 1) {
-						if (background != '') {
-							tiles[background].render(xx * STRETCH_GRID, yy * STRETCH_GRID);
-						}
-						var tile = grids.tile[xx][yy];
-						var tileset = grids.tileset[xx][yy];
-						if (tile != '') {
-							tiles[tile].render(xx * STRETCH_GRID, yy * STRETCH_GRID);
-						}
-						if (tileset != '') {
-							renderTileSet(tileset, xx, yy);
+				var cw = WIDTH / STRETCH_GRID;
+				var ch = HEIGHT / STRETCH_GRID;
+				for (var cx = 0; cx < cw; cx += 1) {
+					for (var cy = 0; cy < ch; cy += 1) {
+						var xx = cx + x_shift;
+						var yy = cy + y_shift;
+						if (xx >= 0 && xx < mapWidth && yy >= 0 && yy < mapHeight) {
+							if (background != '') {
+								tiles[background].render(cx * STRETCH_GRID, cy * STRETCH_GRID);
+							}
+							var tile = grids.tile[xx][yy];
+							var tileset = grids.tileset[xx][yy];
+							var wall = grids.wall[xx][yy];
+							if (tileset != '') {
+								renderTileSet(tileset, cx, cy, xx, yy);
+							}
+							if (tile != '') {
+								tiles[tile].render(cx * STRETCH_GRID, cy * STRETCH_GRID);
+							}
+							if (wall != '') {
+								renderWallSet(wall, cx, cy, xx, yy);
+							} else if (yy > 0) {
+								var above = grids.wall[xx][yy - 1];
+								if (above != '') {
+									renderWallFace(above, cx, cy);
+								}
+							}
 						}
 					}
 				}
 			};
 			var tiles = {};
 			var tilesets = {};
+			var walls = {};
 			tiles.grass = createTileSprite('grass'); 
 			tiles.water = createTileSprite('water'); 
-			
+
 			tilesets.grass_water = createTileSheet('grass_water');
 			tilesets.grass_dirt = createTileSheet('grass_dirt');
+
+			walls.cave = createWallSheet('cave');
 
 			//change values
 			//set up the selection lists
@@ -114,7 +159,6 @@
 				var list = document.getElementById('placementCategories');
 				list.appendChild(option);
 			}
-			var grass_water = createTileSheet('grass_water');
 		</script>
 	</body>
 </html>
