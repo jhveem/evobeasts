@@ -24,7 +24,6 @@ ul.inventory li {
 	display: grid;
 	grid-gap: 10px;
 	padding: 10px;
-	grid-template-columns: 1fr 1fr;
 }
 .mover {
 	grid-template-columns: auto;
@@ -55,4 +54,14 @@ ul.inventory li {
 }
 .item-description {
 	justify-content: left;
+}
+@media only screen and (min-width: 0px) {
+  .inventory{
+	grid-template-columns: 1fr;
+  }
+}
+@media only screen and (min-width: 1024px) {
+  .inventory{
+	grid-template-columns: 1fr 1fr;
+  }
 }
