@@ -122,50 +122,70 @@ function setSolid() {
 	}
 }
 
-function saveMap() {
-	var name = document.getElementById('mapName').value;
+function saveMap(name) {
+	var name = name || document.getElementById('mapName').value;
 	var load = document.getElementById('loadName').value;
 	if (name == '') {
 		if (load !== '') {
 			name = load;
 		}
 	}
+	console.log(name);
 	if (name != '') {
-		var request = new XMLHttpRequest();
+		let header = new Headers();
+		header.append('Content-Type', 'application/x-www-form-urlencoded');
+		let url = "http://h2zgames.com/evobeast-api/saveMap.php";
 		var saveData = {};
 		saveData.mapWidth = mapWidth;
 		saveData.mapHeight = mapHeight;
 		saveData.grids = grids;
 		saveData.background = background;
 		saveData.instList = instList;
-		request.open("POST", "maps/saveMap.php", true);
-		request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		request.send("map="+ JSON.stringify(saveData) + "&name="+name);
-		request.responseType = 'json';
-		request.onload = function() {
+		fetch(url, {
+			method: 'post',
+			body: 'name='+name+"&map="+JSON.stringify(saveData),
+			headers: header,
+		})
+		.then(function(response) {
+			return response.text();
+		}).then(function(json) {
 			getMapsList(name);
-		}
+		});
 	}
 }
 function getMapsList(selected) {
 	var list = document.getElementById('loadName');
-	var request = new XMLHttpRequest();
+	let header = new Headers();
+	header.append('Content-Type', 'application/x-www-form-urlencoded');
 	var selected = selected || '';
-	request.open("GET", "maps/getMapsList.php");
-	request.send();
-	request.onload = function() {
-		list.innerHTML = request.response;
+	let url = "http://h2zgames.com/evobeast-api/getMapsList.php";
+	fetch(url, {
+		method: 'get',
+		headers: header,
+	})
+	.then(function(response) {
+		return response.text();
+	}).then(function(json) {
+		console.log(json);
+		list.innerHTML = json;
 		list.value = selected;
-	}
+	});
 }
 function loadMap(name) {
 	var name = name || document.getElementById('loadName').value;
-	var request = new XMLHttpRequest();
-	request.open("GET", "maps/"+name+".map");
-	request.send();
-	request.responseType = 'json';
-	request.onload = function() {
-		var r = request.response;
+	let header = new Headers();
+	header.append('Content-Type', 'application/x-www-form-urlencoded');
+	let url = "http://h2zgames.com/evobeast-api/loadMap.php";
+	fetch(url, {
+		method: 'post',
+		body: 'name='+name,
+		headers: header,
+	})
+	.then(function(response) {
+		return response.json();
+	}).then(function(json) {
+		console.log(json);
+		var r = json;
 		grids = r.grids;
 		background = r.background;
 		mapWidth = r.mapWidth;
@@ -189,7 +209,7 @@ function loadMap(name) {
 			}
 		}
 		setSolid();
-	}
+	});
 
 }
 
