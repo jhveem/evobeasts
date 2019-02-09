@@ -26,7 +26,9 @@ function initMapVars() {
 
 	walls.cave = createWallSheet('cave');
 
-	instSprites.tree = createInstSprite('tree');
+	for (var i in instData) {
+		instSprites[i] = createInstSprite(i);
+	}
 
 	for (c in charData) {
 		if (charData[c].type === 'evobeast' && charData[c].family !== '') {
@@ -130,7 +132,6 @@ function saveMap(name) {
 			name = load;
 		}
 	}
-	console.log(name);
 	if (name != '') {
 		let header = new Headers();
 		header.append('Content-Type', 'application/x-www-form-urlencoded');
@@ -166,7 +167,6 @@ function getMapsList(selected) {
 	.then(function(response) {
 		return response.text();
 	}).then(function(json) {
-		console.log(json);
 		list.innerHTML = json;
 		list.value = selected;
 	});
@@ -184,7 +184,6 @@ function loadMap(name) {
 	.then(function(response) {
 		return response.json();
 	}).then(function(json) {
-		console.log(json);
 		var r = json;
 		grids = r.grids;
 		background = r.background;

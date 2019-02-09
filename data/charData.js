@@ -204,10 +204,22 @@ var charData = {
 		evol: [],
 	},
 	
-	gylar: {
+	fylar: {
 		type: 'evobeast',
-		family: '',
-		element1: '',
+		family: 'fylar',
+		element1: 'plague',
+		evol: ['cornu', 'galer'],
+	},
+	cornu: {
+		type: 'evobeast',
+		family: 'fylar',
+		element1: 'plague',
+		evol: [],
+	},
+	galer: {
+		type: 'evobeast',
+		family: 'fylar',
+		element1: 'plague',
 		evol: [],
 	},
 	
@@ -219,8 +231,8 @@ var charData = {
 	
 	spean: {
 		type: 'evobeast',
-		family: '',
-		element1: '',
+		family: 'spean',
+		element1: 'air',
 		evol: [],
 	},
 	
