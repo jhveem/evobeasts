@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<script src='scripts/sprites.js'></script>
+		<script src='classes/sprites.js'></script>
+		<script src='classes/instances.js'></script>
 		<script src='scripts/editor.js'></script>
+		<script src='scripts/map.js'></script>
+		<script src='data/instData.js'></script>
+		<script src='data/charData.js'></script>
+		<script src='data/sheetData.js'></script>
 		<style>
 		ul {
 			list-style-type: none;
@@ -16,134 +21,117 @@
 		<select id="placementCategories" onchange="setPlacementOptions()"><option></option></select>
 		<select id="placementOptions"><option></option></select>
 		<button onclick="fillGrid()">FILL</button>
+		<button onclick="fillGridAlternating()">FILL ALTERNATING</button>
+		<button onclick="clickSetSolid()">SET SOLID</button>
+		<br>
+		<button onclick="clickSaveMap()">SAVE</button>
+		<input type="text" id="mapName">
+		<button onclick="clickLoadMap()">LOAD</button>
+		<select id="loadName"></select>
+		<br>
+		<input type="text" id="mapW" style="width:64px"><span> x</span>
+		<input type="text" id="mapH" style="width:64px">
+		<button onclick="setMapDimensions()">SET MAP DIMENSIONS</button>
+		<script src='scripts/mapVars.js'></script>
 		<script>
-			var mapWidth = 40;
-			var mapHeight = 40;
-			var GRID_SIZE = 16;
-			var STRETCH = 2;
-			var STRETCH_GRID = GRID_SIZE * STRETCH;
-			var grids = {}
-			var canvas = document.getElementById('mapEditor');
-			var WIDTH = 640;
-			var HEIGHT = 640;
-			var x_shift = 0;
-			var y_shift = 0;
-			var ctx = canvas.getContext('2d');
-			ctx.imageSmoothingEnabled = false;
 			var canvasClick = false;
 			var shiftDown = false;
-			var background = '';
+			var lastMouseGrid= {};
+
+			
 			canvas.onmousedown = function(e) {
 				canvasClick = true;
-				setGridValue(e);
+				let category = document.getElementById('placementCategories').value;
+				let option = document.getElementById('placementOptions').value;
+				if (instTypes.indexOf(category) !== -1) {
+					addInstToList(e);
+				} else {
+					setGridValue(e);
+				}
 			}
 			canvas.onmouseup = function() {
 				canvasClick = false;
 			}
 			canvas.onmousemove = function (e) {
-				setGridValue(e);
+				let category = document.getElementById('placementCategories').value;
+				let option = document.getElementById('placementOptions').value;
+				var mgrid = getMouseGrid(e);
+				if (mgrid.x !== lastMouseGrid.x || mgrid.y !== lastMouseGrid.y) {
+					lastMouseGrid = mgrid;
+					if (instTypes.indexOf(category) !== -1) {
+						addInstToList(e);
+					} else {
+						setGridValue(e);
+					}
+				}
+			}
+
+			getMapsList();
+
+			window.onkeyup = function(e) {
+				var key = e.keyCode ? e.keyCode : e.which;
+				keyCheck[key] =false;
 			}
 			window.onkeydown = function(e) {
 				var key = e.keyCode ? e.keyCode : e.which;
-				//left key
-				if (key == 37) {
-					x_shift += 1;
-				}
-				if (key == 38) {
-					y_shift += 1;
-				}
-				if (key == 39) {
-					x_shift -= 1;
-				}
-				if (key == 40) {
-					y_shift -= 1;
-				}
-			}
-			function fillGrid() {
-				var category = document.getElementById('placementCategories').value;
-				var option = document.getElementById('placementOptions').value;
-				for (var i = 0; i < mapWidth; i += 1) {
-					for (var j = 0; j < mapHeight; j += 1) {
-						grids[category][i][j] = option;
+				var active = document.activeElement.nodeName;
+				if (active != "INPUT") {
+					keyCheck[key] = true;
+					if (key == 79) {
+						STRETCH -= 1;
+						if (STRETCH < 1) {
+							STRETCH = 1;
+						}
+						STRETCH_GRID = GRID_SIZE * STRETCH;
+					}
+					if (key == 80) {
+						STRETCH += 1;
+						if (STRETCH > 4) {
+							STRETCH = 4;
+						}
+						STRETCH_GRID = GRID_SIZE * STRETCH;
 					}
 				}
 			}
-			function setGridValue(e) {
-				if (!e) e = window.event;
-				if (canvasClick == true) {
-					var rect = canvas.getBoundingClientRect();
-					var originX = event.clientX - rect.left;
-					var originY = event.clientY - rect.top;
-					var gridX = Math.floor(originX / (STRETCH * GRID_SIZE)) + x_shift;
-					var gridY = Math.floor(originY / (STRETCH * GRID_SIZE)) + y_shift;
-					if (gridX < mapWidth && gridY < mapHeight) {
-						var category = document.getElementById('placementCategories').value;
-						var option = document.getElementById('placementOptions').value;
-						if (e.shiftKey) {
-							grids[category][gridX][gridY] = '';
-						} else {
-							grids[category][gridX][gridY] = option;
+			function setMapDimensions() {
+				var ww = document.getElementById('mapW').value;
+				var hh = document.getElementById('mapH').value;
+				ww = parseInt(ww);
+				hh = parseInt(hh);
+				var wStart = mapWidth;
+				var hStart = mapHeight;
+				mapWidth = ww;
+				mapHeight = hh;
+				console.log(mapWidth, mapHeight);
+				for (var i = 0; i < mapWidth; i += 1) {
+					if (i >= wStart) {
+						for (var g in grids) {
+							grids[g][i] = [];
 						}
 					}
-				}
-			}
-			grids.tile = [];
-			grids.tileset = [];
-			grids.wall = [];
-			for (var i = 0; i < mapWidth; i += 1) {
-				for (var g in grids) {
-					grids[g][i] = [];
-				}
-				for (var j = 0; j < mapHeight; j += 1) {
-					for (var g in grids) {
-						grids[g][i][j] = '';
-					}
-				}
-			}
-			setInterval(update, 60);
-			function update() {
-				ctx.clearRect(0, 0, WIDTH, HEIGHT);
-				var cw = WIDTH / STRETCH_GRID;
-				var ch = HEIGHT / STRETCH_GRID;
-				for (var cx = 0; cx < cw; cx += 1) {
-					for (var cy = 0; cy < ch; cy += 1) {
-						var xx = cx + x_shift;
-						var yy = cy + y_shift;
-						if (xx >= 0 && xx < mapWidth && yy >= 0 && yy < mapHeight) {
-							if (background != '') {
-								tiles[background].render(cx * STRETCH_GRID, cy * STRETCH_GRID);
-							}
-							var tile = grids.tile[xx][yy];
-							var tileset = grids.tileset[xx][yy];
-							var wall = grids.wall[xx][yy];
-							if (tileset != '') {
-								renderTileSet(tileset, cx, cy, xx, yy);
-							}
-							if (tile != '') {
-								tiles[tile].render(cx * STRETCH_GRID, cy * STRETCH_GRID);
-							}
-							if (wall != '') {
-								renderWallSet(wall, cx, cy, xx, yy);
-							} else if (yy > 0) {
-								var above = grids.wall[xx][yy - 1];
-								if (above != '') {
-									renderWallFace(above, cx, cy);
+					for (var j = 0; j < mapHeight; j += 1) {
+						if (i >= wStart || j >= hStart) {
+							for (var g in grids) {
+								if (g == 'wall') {
+									grids[g][i][j] = grids[g][0][0];
+								} else {
+									grids[g][i][j] = '';
 								}
 							}
 						}
 					}
 				}
-			};
-			var tiles = {};
-			var tilesets = {};
-			var walls = {};
-			tiles.grass = createTileSprite('grass'); 
-			tiles.water = createTileSprite('water'); 
-
-			tilesets.grass_water = createTileSheet('grass_water');
-			tilesets.grass_dirt = createTileSheet('grass_dirt');
-
-			walls.cave = createWallSheet('cave');
+			}
+			function clickLoadMap() {
+				loadMap();
+			}
+			function clickSaveMap() {
+				saveMap();
+			}
+			function clickSetSolid() {
+				setSolid();
+			}
+			
 
 			//change values
 			//set up the selection lists
@@ -159,6 +147,14 @@
 				var list = document.getElementById('placementCategories');
 				list.appendChild(option);
 			}
+			for (var i in instTypes) {
+				var option = document.createElement('option');
+				let t = instTypes[i];
+				option.innerHTML = t;
+				var list = document.getElementById('placementCategories');
+				list.appendChild(option);
+			}
+			instList.push(createChar('will_sword', 96, 96, 'yes'));
 		</script>
 	</body>
 </html>
