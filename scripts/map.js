@@ -1,4 +1,5 @@
-function initMapVars() {
+function initMapVars(editor) {
+	var editor = editor || 'no';
 	for (var i = 0; i < 200; i += 1) {
 		keyCheck[i] = false;
 	}
@@ -30,12 +31,14 @@ function initMapVars() {
 		instSprites[i] = createInstSprite(i);
 	}
 
-	for (c in charData) {
-		if (charData[c].type === 'evobeast' && charData[c].family !== '') {
-			charSprites[c] = createCharSprites(c, 'overworld');
-		}
-		if (charData[c].type === 'tamer') {
-			charSprites[c] = createCharSprites(c, 'overworld');
+	if (editor === 'yes') {
+		for (c in charData) {
+			if (charData[c].type === 'evobeast' && charData[c].family !== '') {
+				charSprites[c] = createCharSprites(c, 'overworld');
+			}
+			if (charData[c].type === 'tamer') {
+				charSprites[c] = createCharSprites(c, 'overworld');
+			}
 		}
 	}
 
@@ -54,7 +57,7 @@ function renderMap() {
 			dx = xx * GRID_SIZE - x_shift;
 			dy = yy * GRID_SIZE - y_shift;
 			if (background != '') {
-				tiles[background].render(dx * STRETCH, dy * STRETCH);
+				tiles[background].render(dx * STRETCH, dy * STRETCH, 0, STRETCH);
 			}
 		}
 	}
@@ -67,7 +70,7 @@ function renderMap() {
 	//tiles
 	renderGrid(grids.tile, function(square, dx, dy, xx, yy) {
 		if (square != ''  && dx > -GRID_SIZE && dy >= -GRID_SIZE && dx < (WIDTH / STRETCH) && dy < (HEIGHT / STRETCH)) {
-			tiles[square].render(dx * STRETCH, dy * STRETCH);
+			tiles[square].render(dx * STRETCH, dy * STRETCH, STRETCH);
 		}
 	});
 	//walls
@@ -203,6 +206,9 @@ function loadMap(name) {
 			if (type === 'char') {
 				instList.push(createChar(getInst.name, getInst.destX, getInst.destY, getInst.focus));
 			}
+			if (type === 'player') {
+				instList.push(createPlayer(getInst.name, getInst.destX, getInst.destY));
+			}
 			if (type === 'evobeast') {
 				instList.push(createEvobeast(getInst.name, getInst.destX, getInst.destY));
 			}
@@ -212,40 +218,6 @@ function loadMap(name) {
 
 }
 
-function loadMapOld() {
-	var list = document.getElementById('loadName');
-	var name = document.getElementById('loadName').value;
-	var request = new XMLHttpRequest();
-	request.open("POST", "maps/loadMap.php", true);
-	request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	request.send("name="+name);
-	request.responseType = 'json';
-	request.onload = function() {
-		var r = request.response;
-		grids = r.grids;
-		background = r.background;
-		mapWidth = r.mapWidth;
-		mapHeight = r.mapHeight;
-		document.getElementById('mapW').value = mapWidth;
-		document.getElementById('mapH').value = mapHeight;
-		instList = [];
-		for (let i in r.instList) {
-			var getInst = r.instList[i];
-			var type = getInst.type; 
-			if (type === 'inst') {
-				instList.push(createInst(getInst.name, getInst.x, getInst.y));
-			}
-			if (type === 'char') {
-				instList.push(createChar(getInst.name, getInst.destX, getInst.destY, getInst.focus));
-			}
-			if (type === 'evobeast') {
-				instList.push(createEvobeast(getInst.name, getInst.destX, getInst.destY));
-			}
-		}
-		setSolid();
-	}
-
-}
 function renderWallSet(name, dx, dy, xx, yy) {
 	var sprite = walls[name]; 
 	var data = getAdjacentData(name, 'wall', xx, yy);
@@ -275,10 +247,10 @@ function renderTileSet(tileset, dx, dy, xx, yy) {
 	renderSet(tilesprite, dx, dy, sx, sy);
 }
 function renderSet(sprite, dx, dy, sx, sy) {
-	sprite.renderPart(dx * STRETCH, dy * STRETCH, sx.ul, sy.ul, 8, 8);
-	sprite.renderPart(dx * STRETCH + 8 * STRETCH, dy * STRETCH, sx.ur + 8, sy.ur, 8, 8);
-	sprite.renderPart(dx * STRETCH, dy * STRETCH + 8 * STRETCH, sx.dl, sy.dl + 8, 8, 8);
-	sprite.renderPart(dx * STRETCH + 8 * STRETCH, dy * STRETCH + 8 * STRETCH, sx.dr + 8, sy.dr + 8, 8, 8);
+	sprite.renderPart(dx * STRETCH, dy * STRETCH, sx.ul, sy.ul, 8, 8, STRETCH);
+	sprite.renderPart(dx * STRETCH + 8 * STRETCH, dy * STRETCH, sx.ur + 8, sy.ur, 8, 8, STRETCH);
+	sprite.renderPart(dx * STRETCH, dy * STRETCH + 8 * STRETCH, sx.dl, sy.dl + 8, 8, 8, STRETCH);
+	sprite.renderPart(dx * STRETCH + 8 * STRETCH, dy * STRETCH + 8 * STRETCH, sx.dr + 8, sy.dr + 8, 8, 8, STRETCH);
 }
 function getAdjacentData(name, gridName, xx, yy) {
 	var data = {};

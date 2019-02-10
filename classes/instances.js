@@ -1,3 +1,57 @@
+function Player(options) {
+	var that = createChar(options.name, options.x, options.y);
+	that.type = 'player';
+	that.startX = that.x / GRID_SIZE;
+	that.startY = that.y / GRID_SIZE;
+	that.moveTimerMax = 30;
+	that.moveTimer = that.moveTimerMax;
+	that.moveRange = 5;
+	that.focus = 'yes';
+
+	that.checkKeys = function() {
+		if (that.focus === 'yes') {
+			//w
+			if (keyCheck[87] == true) {
+				that.move('up');
+				that.state = 'walk';
+			}
+			//s
+			if (keyCheck[83] == true) {
+				that.move('down');
+				that.state = 'walk';
+			}
+			//a
+			if (keyCheck[65] == true) {
+				that.move('left');
+				that.state = 'walk';
+			}
+			//d
+			if (keyCheck[68] == true) {
+				that.move('right');
+				that.state = 'walk';
+			}
+		}
+	}
+	that.updateBase = that.update;
+	that.update = function() {
+		for (let i in instList) {
+			let inst = instList[i];
+			if (inst.type === 'evobeast') {
+				if (inst.x === that.x && inst.y === that.y) {
+					inst.capture();
+				}
+			}
+		}
+		that.updateBase();
+		x_shift = that.x + GRID_SIZE / 2 - (WIDTH / STRETCH) / 2;
+		y_shift = that.y + GRID_SIZE / 2 - (HEIGHT / STRETCH) / 2;
+	}
+	if (that.focus === 'yes') {
+		FOCUS = that;
+	}
+	return that;
+}
+
 function Tamer(options) {
 	var that = createChar(options.name, options.x, options.y);
 	that.type = 'evobeast';
@@ -52,6 +106,7 @@ function Evobeast(options) {
 	that.moveTimerMax = 60;
 	that.moveTimer = that.moveTimerMax;
 	that.moveRange = 5;
+	that.level = 1;
 
 	that.getDirDist = function(dir, xx, yy) {
 		var distX = Math.abs(xx + that.getDirVal(dir).x - that.startX);
@@ -63,6 +118,15 @@ function Evobeast(options) {
 			return false;
 		}
 		return true;
+	}
+
+	that.capture = function() {
+		let statData = calcEvobeastStats(that.name, that.level);
+		statData.level = that.level;
+		statData.user = 'vulhar';
+		statData.evobeast = that.name;
+		addEvobeast(statData);
+		that.destroy();
 	}
 
 	that.getAvailableDirs = function() {
@@ -98,6 +162,9 @@ function Char(options) {
 	var that = Inst({name: options.name, x: options.x, y: options.y, sprite: options.sprite});
 	that.destX = options.x;
 	that.destY = options.y;
+	if (!(that.name in charSprites)) {
+		charSprites[that.name] = createCharSprites(that.name, 'overworld');
+	}
 	that.sprite = charSprites[that.name];
 	that.dir = options.dir || 'up';
 	that.state = options.state || 'idle';
@@ -136,31 +203,10 @@ function Char(options) {
 		}
 		return {x: 0, y:0};
 	}
-
 	that.checkKeys = function() {
-		if (that.focus === 'yes') {
-			//w
-			if (keyCheck[87] == true) {
-				that.move('up');
-				that.state = 'walk';
-			}
-			//s
-			if (keyCheck[83] == true) {
-				that.move('down');
-				that.state = 'walk';
-			}
-			//a
-			if (keyCheck[65] == true) {
-				that.move('left');
-				that.state = 'walk';
-			}
-			//d
-			if (keyCheck[68] == true) {
-				that.move('right');
-				that.state = 'walk';
-			}
-		}
-	}
+		//
+	};
+
 	that.update = function() {
 		that.state = 'idle';
 		that.checkKeys();
@@ -171,10 +217,6 @@ function Char(options) {
 		}
 		that.x += dx * that.speed;
 		that.y += dy * that.speed;
-		if (FOCUS === that) {
-			x_shift = that.x + GRID_SIZE / 2 - (WIDTH / STRETCH) / 2;
-			y_shift = that.y + GRID_SIZE / 2 - (HEIGHT / STRETCH) / 2;
-		}
 	}
 	that.renderBase = that.render;
 	that.render = function() {
@@ -224,9 +266,17 @@ function Inst(options) {
 		var draw_x = (that.x - x_shift) * STRETCH;
 		var draw_y = (that.y - y_shift) * STRETCH;
 		if (draw_x >= -STRETCH_GRID && draw_y >= -STRETCH_GRID && draw_x < WIDTH + spr.width * STRETCH && draw_y < HEIGHT + spr.height * STRETCH) {
-			spr.render(draw_x, draw_y, that.frameIndex);
+			spr.render(draw_x, draw_y, that.frameIndex, STRETCH);
 		}
 		that.cycleFrames(spr);
+	}
+	that.destroy = function() {
+		for (let i in instList) {
+			if (instList[i] === that) {
+				instList.splice(i, 1);
+				break;
+			}
+		}
 	}
 	return that;
 }
@@ -244,4 +294,8 @@ function createEvobeast(name, xx, yy, focus) {
 function createChar(name, xx, yy, focus) {
 	var focus = focus || 'no';
 	return Char({x: xx, y: yy, name: name, focus: focus});
+}
+function createPlayer(name, xx, yy, focus) {
+	var focus = focus || 'no';
+	return Player({x: xx, y: yy, name: name, focus: focus});
 }

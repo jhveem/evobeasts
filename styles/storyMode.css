@@ -1,0 +1,18 @@
+#map-div {
+}
+.map-image {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 100%;
+	max-width: 960px;
+}
+.map-location {
+	display: inline;
+	position: absolute;
+}
+.location-icon {
+	position: absolute;
+	width: 32px;
+	height: 32px;
+}

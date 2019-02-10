@@ -19,7 +19,8 @@ function sprite(options) {
 			that.render();
 		}	
 	}
-	that.renderPart = function(x, y, sx, sy, ww, hh) {
+	that.renderPart = function(x, y, sx, sy, ww, hh, stretch) {
+		var stretch = stretch || 1;
 		that.context.drawImage(
 			that.image,
 			sx,
@@ -28,24 +29,25 @@ function sprite(options) {
 			hh,
 			x,
 			y,
-			ww * that.stretch * STRETCH,
-			hh * that.stretch * STRETCH,
+			ww * that.stretch * stretch,
+			hh * that.stretch * stretch,
 		);
 	}
-	that.render = function(x, y, frameIndex) {
+	that.render = function(x, y, frameIndex, stretch) {
 		var x = x || 0;
 		var y = y || 0;
 		var frameIndex = frameIndex || 0;
+		var stretch = stretch || 1;
 		that.context.drawImage(
 			that.image,
 			that.sheetX + frameIndex * that.width,
 			that.sheetY,
 			that.width,
 			that.height,
-			x - that.anchorX * that.stretch * STRETCH,
-			y - that.anchorY * that.stretch * STRETCH,
-			that.width * that.stretch * STRETCH,
-			that.height * that.stretch * STRETCH,
+			x - that.anchorX * that.stretch * stretch,
+			y - that.anchorY * that.stretch * stretch,
+			that.width * that.stretch * stretch,
+			that.height * that.stretch * stretch,
 		);
 		that.update();
 	}

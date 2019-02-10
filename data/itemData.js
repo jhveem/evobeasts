@@ -5,7 +5,7 @@ var itemData = {
 	grand_potion: {
 		description: "Heals 75% of a character's health.",
 	},
-	ring: {
+	iron_ring: {
 		description: "Used for capturing Evobeasts.",
 	},
 };
