@@ -4,10 +4,12 @@
 		<script src='classes/sprites.js'></script>
 		<script src='classes/instances.js'></script>
 		<script src='scripts/editor.js'></script>
-		<script src='scripts/map.js'></script>
 		<script src='scripts/capturing.js'></script>
+		<script src='scripts/items.js'></script>
+		<script src='scripts/cookies.js'></script>
 		<script src='data/instData.js'></script>
 		<script src='data/charData.js'></script>
+		<script src='data/itemData.js'></script>
 		<script src='data/sheetData.js'></script>
 		<style>
 		ul {
@@ -16,24 +18,28 @@
 		</style>
 	</head>
 	<body>
-		<canvas id='mapEditor' width='640' height='640' style='background-color: black;'></canvas>
-		<br>
-		<select id="background" onchange="setBackgroundValue()"><option></option></select>
-		<select id="placementCategories" onchange="setPlacementOptions()"><option></option></select>
-		<select id="placementOptions"><option></option></select>
-		<button onclick="fillGrid()">FILL</button>
-		<button onclick="fillGridAlternating()">FILL ALTERNATING</button>
-		<button onclick="clickSetSolid()">SET SOLID</button>
-		<br>
-		<button onclick="clickSaveMap()">SAVE</button>
-		<input type="text" id="mapName">
-		<button onclick="clickLoadMap()">LOAD</button>
-		<select id="loadName"></select>
-		<br>
-		<input type="text" id="mapW" style="width:64px"><span> x</span>
-		<input type="text" id="mapH" style="width:64px">
-		<button onclick="setMapDimensions()">SET MAP DIMENSIONS</button>
+		<canvas id='game-screen' width='640' height='640' style='float: left; background-color: black;'></canvas>
+		<div id="inst-data"></div>
+		<div style='clear: both;'>
+			<br>
+			<select id="background" onchange="setBackgroundValue()"><option></option></select>
+			<select id="placementCategories" onchange="setPlacementOptions()"><option></option></select>
+			<select id="placementOptions"><option></option></select>
+			<button onclick="fillGrid()">FILL</button>
+			<button onclick="fillGridAlternating()">FILL ALTERNATING</button>
+			<button onclick="clickSetSolid()">SET SOLID</button>
+			<br>
+			<button onclick="clickSaveMap()">SAVE</button>
+			<input type="text" id="mapName">
+			<button onclick="clickLoadMap()">LOAD</button>
+			<select id="loadName"></select>
+			<br>
+			<input type="text" id="mapW" style="width:64px"><span> x</span>
+			<input type="text" id="mapH" style="width:64px">
+			<button onclick="setMapDimensions()">SET MAP DIMENSIONS</button>
+		</div>
 		<script src='scripts/mapVars.js'></script>
+		<script src='scripts/map.js'></script>
 		<script>
 			var canvasClick = false;
 			var shiftDown = false;

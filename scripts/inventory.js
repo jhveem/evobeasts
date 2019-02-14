@@ -1,3 +1,24 @@
+function loadInventory(name) {
+	var name = name || '';
+	let header = new Headers();
+	header.append('Content-Type', 'application/x-www-form-urlencoded');
+	let url = "http://h2zgames.com/evobeast-api/loadInventory.php";
+	fetch(url, {
+		method: 'post',
+		body: 'name='+name,
+		headers: header,
+	})
+	.then(function(response) {
+		return response.json();
+	}).then(function(json) {
+		for (let i in json.inventory) {
+			let item = json.inventory[i];
+			addListItem(item);
+		}
+	});
+
+}
+
 function createListItem(data, moveable) {
 	var list = document.getElementById('inventory');
 	var li = document.createElement('inventory-item');
@@ -16,7 +37,7 @@ function createListItem(data, moveable) {
 		<div class="item-img"></div>
 		<div class="item-item">`+name+`</div>
 		<div class="item-description item-item">`+description+`</div>
-		<div class="item-item">`+data.quantity+`</div>
+		<div class="item-item">`+data.ammount +`</div>
 	</div>`;
 
 	li.innerHTML = html;

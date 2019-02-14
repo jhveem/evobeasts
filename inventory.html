@@ -3,6 +3,7 @@
 	<head>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 		<script src="/scripts/inventory.js"></script>
+		<script src="/scripts/cookies.js"></script>
 		<script src="/classes/sprites.js"></script>
 		<script src="/data/elementData.js"></script>
 		<script src="/data/itemData.js"></script>
@@ -38,6 +39,11 @@
 		var x, y, xShift, yShift;
 		window.onload = function() {
 			var mydiv = document.getElementById('move');
+			if (getCookie('username') !== '') {
+				loadInventory(getCookie('username'));
+			} else {
+				window.location.replace("login.html");
+			}
 			window.addEventListener('mousemove', function(event) {
 				x = event.clientX;
 				y = event.clientY;
@@ -46,10 +52,6 @@
 					mydiv.style.top = y + yShift + 'px';
 				}
 			}, false);
-			addListItem({item: 'potion', quantity: 2});
-			addListItem({item: 'iron_ring', quantity: 2});
-			addListItem({item: 'grand_potion', quantity: 2});
-			addListItem({item: 'iron_ring', quantity: 2});
 		};
 	</script>
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

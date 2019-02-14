@@ -23,4 +23,12 @@ instData = {
 		anchorY: 32,
 		solid: true,
 	},
+	_blank: {
+		frames: 1,
+		ww: 16,
+		hh: 16,
+		anchorX: 0,
+		anchorY: 0,
+		solid: false,
+	}
 }

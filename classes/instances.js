@@ -1,5 +1,62 @@
+function Door(options) {
+	var that = Inst({name: 'door', x: options.x, y: options.y});
+	that.type = 'door';
+	that.destX = options.destX || 0;
+	that.destY = options.destY || 0;
+	that.destMap = options.destMap || '';
+	that.collision = function() {
+		if (that.destX !== -1 && that.destY !== -1) {
+			if (playerX === -1 && playerY === -1) {
+				let p = getPlayer();
+				playerX = that.destX;
+				playerY = that.destY;
+				playerDir = getPlayer().dir;
+				loadMap(that.destMap);
+			}
+		}
+	}
+	that.renderBase = that.render;
+	that.render = function() {
+		if (checkEditor()) {
+			that.renderBase(instSprites['_blank']);
+		}
+	};
+	return that;
+}
+function Item(options) {
+	var that = Inst({name: options.name, sprite: options.sprite, x: options.x, y: options.y});
+	that.type = 'item';
+	if (!(that.name in itemSprites)) {
+		itemSprites[that.name] = createItemSprites(that.name);
+	}
+	that.sprite = itemSprites[that.name];
+	that.ammount = options.ammount || 1;
+	
+	that.collision = function() {
+		addItem(that.name, that.ammount);
+		that.destroy();
+	}
+
+	return that;
+}
+function getPlayer() {
+	for (let i = 0; i < instList.length; i++) {
+		if (instList[i].type === 'player') {
+			return instList[i];
+		}
+	}
+}
 function Player(options) {
+	if (playerX !== -1) {
+		options.x = playerX;
+	}
+	if (playerY !== -1) {
+		options.y = playerY;
+	}
 	var that = createChar(options.name, options.x, options.y);
+	if (playerDir != '') {
+		that.dir = playerDir;
+	}
 	that.type = 'player';
 	that.startX = that.x / GRID_SIZE;
 	that.startY = that.y / GRID_SIZE;
@@ -34,13 +91,22 @@ function Player(options) {
 	}
 	that.updateBase = that.update;
 	that.update = function() {
+		if (playerX != -1 || playerY !=-1) {
+			if (that.x != playerX || that.y != playerY) {
+				playerX = -1;
+				playerY = -1;
+				playerDir = '';
+				playerMap = '';
+			}
+		}
 		for (let i in instList) {
 			let inst = instList[i];
-			if (inst.type === 'evobeast') {
-				if (inst.x === that.x && inst.y === that.y) {
-					inst.capture();
+			if (inst.x === that.x && inst.y === that.y) {
+				if (inst.type !== 'player') {
+					inst.collision();
 				}
 			}
+
 		}
 		that.updateBase();
 		x_shift = that.x + GRID_SIZE / 2 - (WIDTH / STRETCH) / 2;
@@ -120,10 +186,10 @@ function Evobeast(options) {
 		return true;
 	}
 
-	that.capture = function() {
+	that.collision = function() {
 		let statData = calcEvobeastStats(that.name, that.level);
 		statData.level = that.level;
-		statData.user = 'vulhar';
+		statData.user = getCookie('username');
 		statData.evobeast = that.name;
 		addEvobeast(statData);
 		that.destroy();
@@ -202,11 +268,11 @@ function Char(options) {
 			return {x: 1, y: 0};
 		}
 		return {x: 0, y:0};
-	}
+	};
 	that.checkKeys = function() {
 		//
 	};
-
+	
 	that.update = function() {
 		that.state = 'idle';
 		that.checkKeys();
@@ -217,11 +283,12 @@ function Char(options) {
 		}
 		that.x += dx * that.speed;
 		that.y += dy * that.speed;
-	}
+	};
+	
 	that.renderBase = that.render;
 	that.render = function() {
 		that.renderBase(that.sprite[that.state][that.dir]);
-	}
+	};
 	if (that.focus === 'yes') {
 		FOCUS = that;
 	}
@@ -239,6 +306,7 @@ function Inst(options) {
 	that.focus = 'no';
 	that.tickCount = 0,
 	that.frameIndex = 0;
+	that.solid = false;
 	that.loop = true;
 
 	that.cycleFrames = function(spr) {
@@ -252,24 +320,29 @@ function Inst(options) {
 				that.frameIndex += 1;
 			} else if (that.loop){
 				that.frameIndex = 0;
+				that.animationEnd();
 			}
 		}
 	}
+	that.animationEnd = function() {};
 
-	that.update = function() {
-		//empty
-	}
+	that.update = function() {};
+	that.collision = function() {};
+
 	that.render = function(spr) {
 		var spr = spr || that.sprite;
-		var numberOfFrames = spr.image.width / spr.width;
-		that.frameIndex %= numberOfFrames;
-		var draw_x = (that.x - x_shift) * STRETCH;
-		var draw_y = (that.y - y_shift) * STRETCH;
-		if (draw_x >= -STRETCH_GRID && draw_y >= -STRETCH_GRID && draw_x < WIDTH + spr.width * STRETCH && draw_y < HEIGHT + spr.height * STRETCH) {
-			spr.render(draw_x, draw_y, that.frameIndex, STRETCH);
+		if (spr.image.width > 0) {
+			var numberOfFrames = spr.image.width / spr.width;
+			that.frameIndex %= numberOfFrames;
+			var draw_x = (that.x - x_shift) * STRETCH;
+			var draw_y = (that.y - y_shift) * STRETCH;
+			if (draw_x >= -STRETCH_GRID && draw_y >= -STRETCH_GRID && draw_x < WIDTH + spr.width * STRETCH && draw_y < HEIGHT + spr.height * STRETCH) {
+				spr.render(draw_x, draw_y, that.frameIndex, STRETCH);
+			}
+			that.cycleFrames(spr);
 		}
-		that.cycleFrames(spr);
-	}
+	};
+
 	that.destroy = function() {
 		for (let i in instList) {
 			if (instList[i] === that) {
@@ -277,9 +350,15 @@ function Inst(options) {
 				break;
 			}
 		}
-	}
+	};
 	return that;
 }
+function createItem(name, xx, yy) {
+	var spr = itemSprites[name];
+	var inst = Item({name: name, sprite: spr, x: xx, y: yy});
+	return inst;
+}
+	
 function createInst(name, xx, yy) {
 	var spr = instSprites[name];
 	var solid = instData[name].solid;
@@ -298,4 +377,9 @@ function createChar(name, xx, yy, focus) {
 function createPlayer(name, xx, yy, focus) {
 	var focus = focus || 'no';
 	return Player({x: xx, y: yy, name: name, focus: focus});
+}
+function createSpecial(name, xx, yy, dx = -1, dy = -1, dmap = '') {
+	if (name === 'door') {
+		return Door({x: xx, y: yy, destX: dx, destY: dy, destMap: dmap});
+	}
 }

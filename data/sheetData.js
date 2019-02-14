@@ -14,6 +14,7 @@ charSheetData.battle_attack= {
 	yy:64,
 	ww:32,
 	hh:64,
+	anchorX: 8,
 	frames:5,
 	speed:.25,
 };
@@ -36,7 +37,7 @@ charSheetData.idle = {
 	frames:4,
 	speed:.125,
 
-}
+};
 charSheetData.walk = {
 	xx:0,
 	yy:320,
@@ -47,7 +48,7 @@ charSheetData.walk = {
 	frames:4,
 	speed:.125,
 
-}
+};
 for (var s in charSheetData) {
 	var state = charSheetData[s];
 	state.xx = 0;
@@ -74,3 +75,4 @@ for (var s in charSheetData) {
 		}
 	}
 }
+charSheetData.battle_attack.down.anchorY = 48;

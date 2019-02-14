@@ -1,4 +1,4 @@
-var canvas = document.getElementById('mapEditor');
+var canvas = document.getElementById('game-screen');
 var ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;
 
@@ -7,8 +7,10 @@ var mapHeight = 40;
 var GRID_SIZE = 16;
 var STRETCH = 2;
 var STRETCH_GRID = GRID_SIZE * STRETCH;
+var PAUSE = false;
 var grids = {};
-var instTypes = ['inst','evobeast', 'tamer', 'treasure','special'];
+var instTypes = ['inst','evobeast', 'tamer', 'item','special'];
+var specialTypes = {'door':{}};
 var instList =[]; 
 var WIDTH = 640;
 var HEIGHT = 640;
@@ -21,15 +23,15 @@ var tilesets = {};
 var walls = {};
 var instSprites = {};
 var charSprites = {};
+var itemSprites = {};
 var tamerSprites = {};
 var FOCUS = {};
 var background = '';
 var DIRS = ['up', 'down', 'left', 'right'];
 var keyCheck = [];
+var playerX = -1;
+var playerY = -1;
+var playerDir = '';
+var playerMap = '';
 
-initMapVars();
 
-setInterval(update, 30);
-function update() {
-	renderMap();
-};

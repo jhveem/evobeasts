@@ -1,4 +1,4 @@
-function sprite(options) {
+function Sprite(options) {
 	var that = {};
 	that.numberOfFrames = 1;
 	that.context = options.context;
@@ -56,7 +56,7 @@ function sprite(options) {
 function createSprite(source, ww, hh) {
 	var image = new Image();
 	image.src = source;
-	var spr = sprite({context: ctx, width: ww, height: hh, image: image});
+	var spr = Sprite({context: ctx, width: ww, height: hh, image: image});
 	return spr;
 }
 function createTileSprite(name, ww, hh) {
@@ -88,17 +88,33 @@ function createInstSprite(name) {
 	var frames = instData[name].frames;
 	var image = new Image();
 	image.src = 'images/insts/'+name+'.png';
-	var spr = sprite({context: ctx, width: ww, height: hh, anchorX: ax, anchorY: ay, image: image, numberOfFrames: frames});
+	var spr = Sprite({context: ctx, width: ww, height: hh, anchorX: ax, anchorY: ay, image: image, numberOfFrames: frames});
 	return spr;
 }
 function createTileLine(src) {
 	var image = new Image();
 	image.src = src;
-	var spr = sprite({context: ctx, width: 32, height: 8, image: image, sheetY: y, numberOfFrames: 4});
+	var spr = Sprite({context: ctx, width: 32, height: 8, image: image, sheetY: y, numberOfFrames: 4});
 }
 function createBattleBack(name) {
 	var src = 'images/battle_backs/battle_back_'+name+'.png';
 	var spr = createSprite(src, 240, 160);
+	return spr;
+}
+function createSkillSprite(name) {
+	let src = 'images/animations/skills/'+name+'.png';
+	let spr = createSprite(src, 64, 64);
+	spr.anchorX = 16;
+	spr.anchorY = 40;
+	return spr;
+}
+function createItemSprites(name) {
+	let returnData = {};
+	let type = 'item';
+	let image = new Image();
+	let src = 'images/items/'+name+'.png';
+	image.src = src;
+	let spr = Sprite({context: ctx, width: 16, height: 16, image: image});
 	return spr;
 }
 function createCharSprites(name, type) {
@@ -108,7 +124,7 @@ function createCharSprites(name, type) {
 	for (var i in charSheetData) {
 		var imgType = '';
 		if (i.indexOf('battle') !== -1) {
-			imgType = 'attack';
+			imgType = 'battle';
 		} else {
 			imgType = 'overworld';
 		}
@@ -118,7 +134,7 @@ function createCharSprites(name, type) {
 				image.src = 'images/evobeasts/'+family+'/'+name+'/'+name+'_'+i+'.png';
 			}
 			if (charData[name].type === 'tamer') {
-				if (imgType === 'attack') {
+				if (imgType === 'battle') {
 					image.src = 'images/tamers/'+family+'/'+name+'/'+name+'_'+i+'.png';
 				} else {
 					image.src = 'images/tamers/'+family+'/'+family+'_'+i+'.png';
@@ -127,7 +143,7 @@ function createCharSprites(name, type) {
 			returnData[i] = {};
 			var sheetData = charSheetData[i];
 			for (var d in charSheetData[i]) {
-				returnData[i][d]= sprite({image: image, context: ctx, width: charSheetData[i].ww, height: charSheetData[i].hh, numberOfFrames: charSheetData[i].frames, anchorX: charSheetData[i].anchorX, anchorY: charSheetData[i].anchorY, sheetX: charSheetData[i][d].xx, sheetY: charSheetData[i][d].yy});
+				returnData[i][d]= Sprite({image: image, context: ctx, width: charSheetData[i].ww, height: charSheetData[i].hh, numberOfFrames: charSheetData[i].frames, anchorX: charSheetData[i][d].anchorX, anchorY: charSheetData[i][d].anchorY, sheetX: charSheetData[i][d].xx, sheetY: charSheetData[i][d].yy});
 			}
 		}
 	}

@@ -1,5 +1,14 @@
-function initMapVars(editor) {
-	var editor = editor || 'no';
+
+initMapVars();
+setInterval(update, 30);
+function update() {
+	renderMap();
+}
+function checkEditor() {
+	return window.location.pathname === "/editor.html";
+}
+
+function initMapVars() {
 	for (var i = 0; i < 200; i += 1) {
 		keyCheck[i] = false;
 	}
@@ -31,7 +40,7 @@ function initMapVars(editor) {
 		instSprites[i] = createInstSprite(i);
 	}
 
-	if (editor === 'yes') {
+	if (checkEditor()) {
 		for (c in charData) {
 			if (charData[c].type === 'evobeast' && charData[c].family !== '') {
 				charSprites[c] = createCharSprites(c, 'overworld');
@@ -40,6 +49,9 @@ function initMapVars(editor) {
 				charSprites[c] = createCharSprites(c, 'overworld');
 			}
 		}
+		for (i in itemData) {
+			itemSprites[i] = createItemSprites(i);
+		}
 	}
 
 			
@@ -47,48 +59,51 @@ function initMapVars(editor) {
 }
 function renderMap() {
 	ctx.clearRect(0, 0, WIDTH, HEIGHT);
-	//depth for all of the instances, change to have a depth value but if it is -1 it equals y
-	for (var i in instList) {
-		instList[i].update();
-	}
-	instList.sort(function(a, b) {return a.y - b.y});
-	for (var yy = 0; yy < mapHeight; yy += 1) {
-		for (var xx = 0; xx < mapWidth; xx += 1) {
-			dx = xx * GRID_SIZE - x_shift;
-			dy = yy * GRID_SIZE - y_shift;
-			if (background != '') {
-				tiles[background].render(dx * STRETCH, dy * STRETCH, 0, STRETCH);
-			}
+	if (PAUSE === false) {
+		//depth for all of the instances, change to have a depth value but if it is -1 it equals y
+		for (var i in instList) {
+			instList[i].update();
 		}
-	}
-	//tilesets
-	renderGrid(grids.tileset, function(square, dx, dy, xx, yy) {
-		if (square != ''  && dx > -GRID_SIZE && dy >= -GRID_SIZE && dx < (WIDTH / STRETCH) && dy < (HEIGHT / STRETCH)) {
-			renderTileSet(square, dx, dy, xx, yy);
-		}
-	});
-	//tiles
-	renderGrid(grids.tile, function(square, dx, dy, xx, yy) {
-		if (square != ''  && dx > -GRID_SIZE && dy >= -GRID_SIZE && dx < (WIDTH / STRETCH) && dy < (HEIGHT / STRETCH)) {
-			tiles[square].render(dx * STRETCH, dy * STRETCH, STRETCH);
-		}
-	});
-	//walls
-	renderGrid(grids.wall, function(square, dx, dy, xx, yy) {
-		if (dx > -GRID_SIZE && dy >= -GRID_SIZE && dx < (WIDTH / STRETCH) && dy < (HEIGHT / STRETCH)) {
-			if (square != '') {
-				renderWallSet(square, dx, dy, xx, yy);
-			} else if (yy > 0) {
-				var above = grids.wall[xx][yy - 1];
-				if (above != '') {
-					renderWallFace(above, dx, dy);
+		for (var yy = 0; yy < mapHeight; yy += 1) {
+			for (var xx = 0; xx < mapWidth; xx += 1) {
+				dx = xx * GRID_SIZE - x_shift;
+				dy = yy * GRID_SIZE - y_shift;
+				if (background != '') {
+					tiles[background].render(dx * STRETCH, dy * STRETCH, 0, STRETCH);
 				}
 			}
 		}
-	});
-	//insts
-	for (var i in instList) {
-		instList[i].render();
+		//tilesets
+		renderGrid(grids.tileset, function(square, dx, dy, xx, yy) {
+			if (square != ''  && dx > -GRID_SIZE && dy >= -GRID_SIZE && dx < (WIDTH / STRETCH) && dy < (HEIGHT / STRETCH)) {
+				renderTileSet(square, dx, dy, xx, yy);
+			}
+		});
+		//tiles
+		renderGrid(grids.tile, function(square, dx, dy, xx, yy) {
+			if (square != ''  && dx > -GRID_SIZE && dy >= -GRID_SIZE && dx < (WIDTH / STRETCH) && dy < (HEIGHT / STRETCH)) {
+				tiles[square].render(dx * STRETCH, dy * STRETCH, STRETCH);
+			}
+		});
+		//walls
+		renderGrid(grids.wall, function(square, dx, dy, xx, yy) {
+			if (dx > -GRID_SIZE && dy >= -GRID_SIZE && dx < (WIDTH / STRETCH) && dy < (HEIGHT / STRETCH)) {
+				if (square != '') {
+					renderWallSet(square, dx, dy, xx, yy);
+				} else if (yy > 0) {
+					var above = grids.wall[xx][yy - 1];
+					if (above != '') {
+						renderWallFace(above, dx, dy);
+					}
+				}
+			}
+		});
+		//insts
+		let drawList = instList;
+		drawList.sort(function(a, b) {return a.y - b.y});
+		for (var i in drawList) {
+			drawList[i].render();
+		}
 	}
 }
 function renderGrid(grid, drawFunction) {
@@ -179,6 +194,7 @@ function loadMap(name) {
 	let header = new Headers();
 	header.append('Content-Type', 'application/x-www-form-urlencoded');
 	let url = "http://h2zgames.com/evobeast-api/loadMap.php";
+	PAUSE = true;
 	fetch(url, {
 		method: 'post',
 		body: 'name='+name,
@@ -212,8 +228,19 @@ function loadMap(name) {
 			if (type === 'evobeast') {
 				instList.push(createEvobeast(getInst.name, getInst.destX, getInst.destY));
 			}
+			if (type === 'item') {
+				instList.push(createItem(getInst.name, getInst.x, getInst.y));
+			}
+			if (type === 'door') {
+				instList.push(createSpecial(getInst.name, getInst.x, getInst.y, getInst.destX, getInst.destY, getInst.destMap));
+			}
 		}
 		setSolid();
+		let loadMap = document.getElementById('loadName');	
+		if (loadMap !== null) {
+			loadMap.value = name;
+		}
+		PAUSE = false;
 	});
 
 }

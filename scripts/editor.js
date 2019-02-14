@@ -51,6 +51,50 @@ function setGridValue(e) {
 		}
 	}
 }
+function getInstData(i) {
+	let inst = instList[i];
+	let div = document.getElementById('inst-data');
+	div.innerHTML = '';
+	for (let name in inst) {
+		let value = inst[name];
+		let type = typeof(value);
+		if (type !== 'function' && type !== 'object') {
+			let span = document.createElement('span');
+			span.innerHTML = name;
+			div.appendChild(span);
+			let input = document.createElement('input');
+			input.setAttribute('type','text');
+			input.setAttribute('id', 'inst-data-'+name);
+			input.value = value;
+			div.appendChild(input);
+			let br = document.createElement('br');
+			div.appendChild(br);
+		}
+	}
+	let save = document.createElement('a');
+	save.href = "javascript: saveInstData("+i+");";
+	save.innerHTML = "save";
+	div.appendChild(save);
+}
+function saveInstData(instIndex) {
+	let div = document.getElementById('inst-data');
+	let vals = div.getElementsByTagName('input');
+	let inst = instList[instIndex];
+	for (let i = 0; i < vals.length; i++) {
+		let val = vals[i];
+		let name = val.id.replace('inst-data-','');
+		let value = val.value;
+		if (typeof(inst[name]) === 'number') {
+			value = parseInt(value);
+		}
+		if (typeof(inst[name]) === 'boolean') {
+			value = value === 'true'; 
+		}
+		inst[name] = value;
+		inst[name]
+	}
+	getInstData(instIndex);
+}
 function getMouseGrid(e) {
 	var e = e || window.event;
 	var rect = canvas.getBoundingClientRect();
@@ -71,8 +115,8 @@ function addInstToList(e) {
 		var yy = gridY * GRID_SIZE;
 		if (gridX < mapWidth && gridY < mapHeight) {
 			if (e.shiftKey) {
-				for (var i in instList) {
-					var inst = instList[i];
+				for (let i in instList) {
+					let inst = instList[i];
 					if (inst.x == xx && inst.y == yy) {
 						if (inst !== FOCUS) {
 						instList.splice(i, 1);
@@ -80,16 +124,28 @@ function addInstToList(e) {
 					}
 				}
 				setSolid();
+			} else if (e.altKey) {
+				for (let i in instList) {
+					let inst = instList[i];
+					if (inst.x == xx && inst.y == yy) {
+						getInstData(i);
+					}
+				}
 			} else {
-				var category = document.getElementById('placementCategories').value;
-				var option = document.getElementById('placementOptions').value;
+				let category = document.getElementById('placementCategories').value;
+				let option = document.getElementById('placementOptions').value;
 				if (category === 'inst') {
 					instList.push(createInst(option, xx, yy));
 				} else if (category === 'evobeast') {
 					instList.push(createEvobeast(option, xx, yy));
 				} else if (category === 'tamer') {
 					instList.push(createChar(option, xx, yy));
+				} else if (category === 'item') {
+					instList.push(createItem(option, xx, yy));
+				} else if (category === 'special') {
+					instList.push(createSpecial(option, xx, yy));
 				}
+
 				setSolid();
 			}
 		}
@@ -116,6 +172,12 @@ function setPlacementOptions() {
 	}
 	if (category === 'tamer') {
 		group = charSprites;
+	}
+	if (category === 'item') {
+		group = itemSprites;
+	}
+	if (category === 'special') {
+		group = specialTypes;
 	}
 	var list = document.getElementById('placementOptions');
 	while (list.childNodes[0]) {
