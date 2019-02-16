@@ -56,7 +56,7 @@ function createListItem(data, moveable) {
 	cell[0].appendChild(canvas);
 	var family = charData[data.evobeast].family;
 	img.src = '/images/evobeasts/'+family+'/'+data.evobeast+'.png';
-	spr = sprite({
+	spr = Sprite({
 		width: 64,
 		height: 64,
 		stretch: 1,

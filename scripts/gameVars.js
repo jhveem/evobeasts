@@ -1,6 +1,8 @@
 var canvas = document.getElementById('game-screen');
 var ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;
+ctx.font = "16px VT323";
+ctx.fillText('',0,0);
 
 var mapWidth = 40;
 var mapHeight = 40;

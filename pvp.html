@@ -1,72 +1,59 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-	<script src="/scripts/cookies.js"></script>
-	<script src='/data/charData.js'></script>
-	<script src='/data/sheetData.js'></script>
-	<script src='/classes/sprites.js'></script>
-	<style>
-	canvas {
-		image-rendering: pixelated;
-		padding-left: 0;
-		padding-right: 0;
-		margin-left: auto;
-		margin-right: auto;
-		display: block;
-	}
-	</style>
-	<link href="styles/mainMenu.css" rel="stylesheet" type='text/css'>
-	<title>EVOBEASTS</title>
-</head>
-<body>
-		<nav class="navbar navbar-expand-lg navbar-light">
-			<div class="navbar-header">
-			<a class="navbar-brand" href="/index.html">EVOBEASTS</a>
-			</div>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav">
-					<li class="nav-item"><a class="nav-link" href='/collection.html'>collection</a></li>
-					<li class="nav-item"><a class="nav-link" href='/inventory.html'>inventory</a></li>
-					<li class="nav-item"><a class="nav-link" href='/storyMode.html'>story mode</a></li>
-					<li class="nav-item active"><a class="nav-link" href='/pvp.html'>pvp</a></li>
-				</ul>
-			</div>
-		</nav>
-	<br>
-	<canvas id='ctx' style='border:1px solid #000000;'></canvas>
-	<nav class="navbar navbar-expand-lg navbar-light nav-bottom">
-		<a class="navbar-brand" href="https://github.com/jhveem/evobeasts">git</a>
-	</nav>
-	<script>
-		var ctx = document.getElementById('ctx').getContext('2d');
-		var canvas = document.getElementById('ctx');
-		var WIDTH = 960;
-		var HEIGHT = 640;
-		var STRETCH = 4;
-		canvas.width = WIDTH;
-		canvas.height = HEIGHT;
-		ctx.imageSmoothingEnabled = false;
-		var battleBack = createBattleBack('grass'); 
-		
-		var battleInst = {};
-		ctx.font = '30px Arial';
-		setInterval(update, 60);
-		function update() {
-			ctx.clearRect(0, 0, WIDTH, HEIGHT);
-			battleBack.render(0, 0, 0, STRETCH);
-			for (var  i in battleInst) { 
-				var bInst= battleInst[i];
-				bInst.draw();
-			}
+	<head>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.js"></script>
+		<script src="/scripts/cookies.js"></script>
+		<script src='/data/charData.js'></script>
+		<script src='/data/sheetData.js'></script>
+		<script src='/classes/sprites.js'></script>
+		<style>
+		canvas {
+			image-rendering: pixelated;
+			padding-left: 0;
+			padding-right: 0;
+			margin-left: auto;
+			margin-right: auto;
+			display: block;
 		}
+		</style>
+		<link href="styles/mainMenu.css" rel="stylesheet" type='text/css'>
+		<title>EVOBEASTS</title>
+	</head>
+	<body>
+		<div id="mainMenu" v-html='createMenu()'></div>
+		<br>
+		<canvas id='ctx' style='border:1px solid #000000;'></canvas>
+		<nav class="navbar navbar-expand-lg navbar-light nav-bottom">
+			<a class="navbar-brand" href="https://github.com/jhveem/evobeasts">git</a>
+		</nav>
+		<script src="/scripts/menu.js"></script>
+		<script>
+			var ctx = document.getElementById('ctx').getContext('2d');
+			var canvas = document.getElementById('ctx');
+			var WIDTH = 960;
+			var HEIGHT = 640;
+			var STRETCH = 4;
+			canvas.width = WIDTH;
+			canvas.height = HEIGHT;
+			ctx.imageSmoothingEnabled = false;
+			var battleBack = createBattleBack('grass'); 
+			
+			var battleInst = {};
+			ctx.font = '30px Arial';
+			setInterval(update, 60);
+			function update() {
+				ctx.clearRect(0, 0, WIDTH, HEIGHT);
+				battleBack.render(0, 0, 0, STRETCH);
+				for (var  i in battleInst) { 
+					var bInst= battleInst[i];
+					bInst.draw();
+				}
+			}
 
-	</script>
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-</body>
+		</script>
+			<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+			<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	</body>
 </html>

@@ -55,6 +55,55 @@ function BattleAnimation(options) {
 	};
 	return that;
 }
+function BattleMessage(options) {
+	var that = {};
+	that.message = options.message;
+	that.type = options.type;
+	that.x = options.x;
+	that.y = options.y;
+	that.size = options.size || 32;
+	that.color = options.color || '#FFF';
+	that.tickCount = options.tickCount || 10;
+	that.tick = that.tickCount;
+
+	that.destroy = function() {
+		for (let i in battleMessages) {
+			let m = battleMessages[i];
+			if (m === that) {
+				battleMessages.splice(i, 1);
+				break;
+			}
+		}
+	};
+
+	that.cycle = function() {
+		if (that.type === 'counter') {
+			if (that.message === 0) {
+				that.destroy();
+			} else {
+				that.tickCount = 1;
+				that.message -= 1;
+			}
+		}
+	};
+	
+	that.render = function() {
+		ctx.font = ""+that.size*STRETCH+"px VT323";
+		ctx.fillStyle = that.color;
+		ctx.textAlign = "center";
+		ctx.fillText(that.message, that.x * STRETCH, that.y * STRETCH);
+		if (that.tickCount > 0) {
+			that.tick -= 1;
+			if (that.tick === 0) {
+				that.cycle();
+				that.tick = that.tickCount;
+			}
+		}
+			
+	};
+	
+	return that;
+}
 function createBattleInst(name, xx, yy, team) {
 	let inst = {};
 	inst.name = '';
@@ -66,4 +115,9 @@ function createBattleInst(name, xx, yy, team) {
 function createBattleAnimation(name, xx, yy, subtype = '') {
 	let inst = BattleAnimation({name: name, x: xx, y: yy, subtype: subtype});
 	return inst;
+}
+function createBattleMessage(type, message, xx, yy) {
+	let m = BattleMessage({type: type, message: message, x: xx, y: yy});
+	m.color = 'red';
+	return m;
 }

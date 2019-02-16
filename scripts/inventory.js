@@ -44,7 +44,7 @@ function createListItem(data, moveable) {
 	var cell = li.getElementsByClassName('item-img');
 	cell[0].appendChild(canvas);
 	img.src = '/images/items/'+data.item+'.png';
-	spr = sprite({
+	spr = Sprite({
 		width: 32,
 		height: 32,
 		stretch: 2,

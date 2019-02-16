@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<link rel="stylesheet" href="/styles/mainMenu.css" />
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.min.js"></script>
 		<script src='classes/sprites.js'></script>
 		<script src='classes/instances.js'></script>
 		<script src='scripts/editor.js'></script>
@@ -15,9 +18,13 @@
 		ul {
 			list-style-type: none;
 		}
+		div {
+			background-color: #FFF;
+		}
 		</style>
 	</head>
 	<body>
+		<div id="mainMenu" v-html='createMenu()'></div>
 		<canvas id='game-screen' width='640' height='640' style='float: left; background-color: black;'></canvas>
 		<div id="inst-data"></div>
 		<div style='clear: both;'>
@@ -38,7 +45,8 @@
 			<input type="text" id="mapH" style="width:64px">
 			<button onclick="setMapDimensions()">SET MAP DIMENSIONS</button>
 		</div>
-		<script src='scripts/mapVars.js'></script>
+		<script src="/scripts/menu.js"></script>
+		<script src='scripts/gameVars.js'></script>
 		<script src='scripts/map.js'></script>
 		<script>
 			var canvasClick = false;

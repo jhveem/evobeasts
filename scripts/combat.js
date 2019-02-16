@@ -2,6 +2,21 @@ STRETCH = 4;
 var charSprites = {};
 var skillSprites = {};
 var battleList = []; 
+var charData = {
+	vulhar-1: {
+		name: 'renla',
+		level: 5,
+		vitality: 2.8,
+		spirit: 3.4,
+		strength: 1,
+		mysticism: 4.2,
+		defense: 2,
+		resistance: 3.6,
+		agility: 3,
+		rune1: '',
+		rune2: '',
+	}
+};
 battleList.push(createBattleInst('vespra', 24, 48, 'enemy'));
 battleList.push(createBattleInst('', 72, 48, 'enemy'));
 battleList.push(createBattleInst('vespra', 120, 48, 'enemy'));
@@ -10,7 +25,7 @@ battleList.push(createBattleInst('will_sword', 72, 124, 'ally'));
 battleList.push(createBattleInst('renla', 120, 124, 'ally'));
 var battleCommands = []; 
 var battleAnimations = [];
-var battleTexts = [];
+var battleMessages= [];
 battleCommands.push({type: 'skill_init', c: 4, targ: [0], skill: 'attack_sword', state: 'attack', init: false});
 battleCommands.push({type: 'skill_init', c: 0, targ: [4], skill: 'attack_sword', state: 'attack', init: false});
 
@@ -42,29 +57,34 @@ function update() {
 					battleAnimations.push(createBattleAnimation(command.skill, targ.x, targ.y, 'skill'));
 					if (command.damage > 0) {
 						battleCommands.splice(1, 0, {type: 'damage', damage: command.damage, x: targ.x + 8, y: targ.y - 8, init: false});
-						console.log('send d');
 					}
 				}
 			}
 			if (command.type === 'damage') {
-				console.log(command);
-				battleTexts.push({message: ''+command.damage, x: command.x, y: command.y});
+				battleMessages.push(createBattleMessage('counter',10,command.x, command.y));
 			}
 			if (command.type === 'char_flash') {
 				//figure out shaders and make char flash white
 			}
 		} else {
+			let finished = false;
 			if (command.type === 'skill_init') {
 				if (c.state === 'idle') {
-					battleCommands.splice(0, 1);
+					finished = true;
 				}
 			}
 			if (command.type === 'skill_animation') {
 				if (battleAnimations.length === 0) {
-					battleCommands.splice(0, 1);
+					finished = true;
 				}
 			}
 			if (command.type === 'damage') {
+				if (battleMessages.length === 0) {
+					finished = true;
+				}
+			}
+			if (finished === true) {
+				battleCommands.splice(0, 1);
 			}
 		}
 	}
@@ -85,11 +105,8 @@ function renderCombat() {
 		let anim = battleAnimations[i];
 		anim.render();
 	}
-	for (i in battleTexts) {
-		let message = battleTexts[i];
-		ctx.font = ""+32*STRETCH+"px VT323";
-		ctx.fillStyle = "red";
-		ctx.textAlign = "center";
-		ctx.fillText(message.message, message.x * STRETCH, message.y * STRETCH);
+	for (i in battleMessages) {
+		let message = battleMessages[i];
+		message.render();
 	}
 }

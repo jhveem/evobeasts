@@ -10,16 +10,22 @@ function login() {
 		headers: header,
 	})
 	.then(function(response) {
-		return response.text();
-	}).then(function(txt) {
-		if (txt === 'successfully logged in') {
+		console.log(response.text);
+		return response.json();
+	}).then(function(json) {
+		if (json.check === 'success') {
 			setCookie('username',name,5);
+			setCookie('usertype',json.type,5);
 			window.location.replace("index.html");
 		}
-		if (txt === 'account created') {
+		else if (json.check === 'created') {
 			alert('account created');
 			setCookie('username',name,5);
+			setCookie('usertype',json.type,5);
 			window.location.replace("index.html");
+		}
+		else {
+			//add in some stuff for other errors
 		}
 	});
 }

@@ -2,6 +2,7 @@
 <html>
 <head>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.js"></script>
 	<link rel="stylesheet" href="styles/storyMode.css" type='text/css'>
 	<link rel="stylesheet" href="styles/mainMenu.css" type='text/css'>
 	<link rel="stylesheet" href="styles/canvas.css" type='text/css'>
@@ -18,22 +19,7 @@
 	<script src='data/sheetData.js'></script>
 </head>
 <body>
-		<nav class="navbar navbar-expand-lg navbar-light">
-			<div class="navbar-header">
-			<a class="navbar-brand" href="/index.html">EVOBEASTS</a>
-			</div>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav">
-					<li class="nav-item"><a class="nav-link" href='/collection.html'>collection</a></li>
-					<li class="nav-item"><a class="nav-link" href='/inventory.html'>inventory</a></li>
-					<li class="nav-item active"><a class="nav-link" href='/storyMode.html'>story mode</a></li>
-					<li class="nav-item"><a class="nav-link" href='/pvp.html'>pvp</a></li>
-				</ul>
-			</div>
-		</nav>
+		<div id="mainMenu" v-html='createMenu()'></div>
 		<div id="map-div" class="data-block">
 			<img id="map-image" class="map-image" src="/images/maps/main.jpg">
 		</div>
@@ -41,7 +27,8 @@
 		<nav class="navbar navbar-expand-lg navbar-light nav-bottom">
 			<a class="navbar-brand" href="https://github.com/jhveem/evobeasts">git</a>
 		</nav>
-		<script src='scripts/mapVars.js'></script>
+		<script src="/scripts/menu.js"></script>
+		<script src='scripts/gameVars.js'></script>
 		<script src='scripts/map.js'></script>
 		<script>
 			window.onload = function() {
