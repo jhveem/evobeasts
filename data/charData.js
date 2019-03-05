@@ -12,7 +12,9 @@ var charData = {
 	will_sword: {
 		type: 'tamer',
 		family: 'will',
-
+		skills: {
+			attack_sword: 1,
+		},
 	},
 
 	renla: {
@@ -20,6 +22,10 @@ var charData = {
 		element1: 'magic',
 		evol: ['reowe', 'renange'],
 		family: 'renla',
+		skills: {
+			pounce: 1,
+			bite: 5,
+		},
 		vitality: '4',
 		spirit: '3',
 		strength: '4',
@@ -111,6 +117,10 @@ var charData = {
 		element1: 'shadow',
 		evol: ['vesgis','vesrax'],
 		family: 'vespra',
+		skills: {
+			pounce: 1,
+			bite: 5,
+		},
 		vitality: '3',
 		spirit: '2.5',
 		strength: '3',
@@ -992,3 +1002,16 @@ var charData = {
 	},
 
 }
+for (let name in charData) {
+	let c = charData[name];
+	charData[name].previous = '';
+	for (let name2 in charData) {
+		let evol = charData[name2].evol;
+		if (evol !== undefined) {
+			if (evol.indexOf(name) > -1) {
+				charData[name].previous = name2;
+			}
+		}
+	}
+}
+

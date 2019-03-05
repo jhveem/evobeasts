@@ -104,7 +104,7 @@ function createBattleBack(name) {
 function createSkillSprite(name) {
 	let src = 'images/animations/skills/'+name+'.png';
 	let spr = createSprite(src, 64, 64);
-	spr.anchorX = 16;
+	spr.anchorX = 24;
 	spr.anchorY = 40;
 	return spr;
 }

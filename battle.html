@@ -7,22 +7,50 @@
 		<link rel="stylesheet" href="styles/mainMenu.css" type='text/css'>
 		<link rel="stylesheet" href="styles/canvas.css" type='text/css'>
 		
-		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.min.js"></script>
 		<script src='classes/sprites.js'></script>
 		<script src='classes/instances.js'></script>
 		<script src='classes/combatInstances.js'></script>
+		<script src='data/instData.js'></script>
+		<script src='data/itemData.js'></script>
+		<script src='data/charData.js'></script>
+		<script src='data/skillData.js'></script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+		<script src='data/sheetData.js'></script>
 		<script src='scripts/storyMode.js'></script>
 		<script src='scripts/capturing.js'></script>
 		<script src='scripts/items.js'></script>
 		<script src='scripts/cookies.js'></script>
-		<script src='data/instData.js'></script>
-		<script src='data/itemData.js'></script>
-		<script src='data/charData.js'></script>
-		<script src='data/sheetData.js'></script>
+		<style>
+			#command-div {
+				display: grid;
+				grid-template-columns: auto auto auto;
+			}
+			#stat-display-div{
+				display: grid;
+				grid-template-columns: auto auto auto;
+			}
+		</style>
 	</head>
 	<body>
 		<canvas id='game-screen' width='640' height='640' style='background-color: black;'></canvas>
+		<div id='stat-display-div'>
+			<div style="color: #FFF" v-for="c in allies" class='command-data' v-bind:id="c.id"> 
+				<stats-name v-bind:name="c.name"></stats-name>
+				<stats-hp v-bind:hp-cur="c.stats.vitality" v-bind:hp-max="c.statsmax.vitality"></stats-hp>
+				<select @change="setSkillCurrent($event, c.id)" class="skill-select">
+					<option v-for="skill in c.skills" v-bind:value="skill">{{skillData[skill].name}}</option>
+				</select>
+				<select v-model='skillCurrent[c.id]' class="target-select">
+					<option v-for="c in targs[c.id]" v-bind:value="c.id">{{c.name}}</option>
+				</select>
+			</div>
+		</div>
+		<button onclick='submitCommands()'>submit</button>
+		<script src='scripts/calc.js'></script>
 		<script src='scripts/gameVars.js'></script>
 		<script src='scripts/combat.js'></script>
+		<script src='scripts/vCombat.js'></script>
 	</body>
 </html>

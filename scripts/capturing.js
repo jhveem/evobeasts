@@ -16,19 +16,20 @@ function addEvobeast(data) {
 	});
 
 }
-function calcEvobeastStats(evobeast, level, boostData) {
-	var boostData = boostData || {};
-	returnData = {};
+function calcCharStats(evobeast, level, baseStats = charData[evobeast], equip = {}) {
+	let returnData = {};
+	//boost data will eventually be calculated from the equip input, but is blank for now.
+	let boostData = {};
 	for (var stat in statData) {
 		let boost = 0;
 		if (stat in boostData) {
 			boost = boostData[stat];
 		}
-		let baseStat = parseInt(charData[evobeast][stat]);
+		let baseStat = parseInt(baseStats[stat]);
 		if (stat === 'vitality') {
 			baseStat = 6 + baseStat * 2;	
 		}
-		let powerStat = Math.pow(level,1+(baseStat*.05)+(boost*.05));
+		let powerStat = Math.pow(level,1+((baseStat + boost) *.05));
 		returnData[stat] = Math.floor((baseStat+ powerStat)); 
 	}
 	return returnData;
