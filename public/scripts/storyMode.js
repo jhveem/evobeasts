@@ -40,7 +40,7 @@ function shiftLocations() {
 }
 function goToMap(name) {
 	document.getElementById('map-div').style.display = 'none';
-	document.getElementById('mapEditor').style.display = 'block';
+	document.getElementById('game-screen').style.display = 'block';
 	loadMap(name);
 }
 
