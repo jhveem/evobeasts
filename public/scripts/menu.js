@@ -6,7 +6,7 @@ let vMenu = new Vue({
 			collection: 'collection',
 			inventory: 'inventory',
 			storyMode: 'story mode',
-			pvp: 'pvp',
+			battle: 'battle',
 			login: 'logout',
 		},
 		menuHtmlStart: `
@@ -41,7 +41,6 @@ let vMenu = new Vue({
 					let name = this.menuItems[link];
 					html += this.createMenuItem(link, name);
 				}
-				console.log(getCookie('usertype'));
 				if (getCookie('usertype') === 'a') {
 					html += this.createMenuItem('editor','editor');
 				}

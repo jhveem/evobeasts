@@ -34,6 +34,7 @@
 		</style>
 	</head>
 	<body>
+		<div id="mainMenu" v-html='createMenu()'></div>
 		<canvas id='game-screen' width='640' height='640' style='background-color: black;'></canvas>
 		<div id='stat-display-div'>
 			<div style="color: #FFF" v-for="c in allies" class='command-data' v-bind:id="c.id"> 
@@ -48,6 +49,13 @@
 			</div>
 		</div>
 		<button onclick='submitCommands()'>submit</button>
+		<nav class="navbar navbar-expand-lg navbar-light nav-bottom">
+			<a class="navbar-brand" href="https://github.com/jhveem/evobeasts">git</a>
+		</nav>
+		<script src="/scripts/menu.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js" integrity="sha256-mpnrJ5DpEZZkwkE1ZgkEQQJW/46CSEh/STrZKOB/qoM=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.7/vue.js" integrity="sha256-g+Q8DFAmG5+eyRPSydX0LY4TfjsL11XSDrIGerbbEdA=" crossorigin="anonymous"></script>
+  
 		<script src='scripts/calc.js'></script>
 		<script src='scripts/gameVars.js'></script>
 		<script src='scripts/combat.js'></script>

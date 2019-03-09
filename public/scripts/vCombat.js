@@ -1,7 +1,7 @@
 var test = 10;
 Vue.component('stats-name', {
 	props: ['name'],
-	template: `<h1>{{ name }}</div>`,
+	template: `<h1>{{ name }}</h1>`,
 });
 
 Vue.component('stats-hp', {
@@ -28,6 +28,7 @@ vStats = new Vue({
 			selected: '',
 			selectedSkill: {},	
 			skillCurrent: skillCurrentBase, 
+			skillData: skillData,
 		}
 	},
 	computed: {

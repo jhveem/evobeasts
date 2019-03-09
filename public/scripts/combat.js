@@ -3,6 +3,8 @@ var charSprites = {};
 var skillSprites = {};
 var battleList = {};
 var battleCharData = {};
+var battleCommands = []; 
+
 battleCharData['vulhar-1'] = {
 	character: 'renla',
 	name: 'renla',
@@ -83,6 +85,20 @@ battleCharData['bob-2'] = {
 	},
 	equip: {},
 };
+console.log(skillData);
+/*
+async function getCharData() {
+	try {
+		let response = await axios.get("http://localhost:3000/combat/chardata");
+		battleCharData = response.data;
+		return true;
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+getCharData();
+*/
 
 //set up characters
 window.onload = function() {
@@ -189,6 +205,14 @@ function submitCommands() {
 	if (check === true) {
 		addPlayerCommands();
 		addEnemyCommands();
+		/*
+		try {
+			let response = await axios.post("http://localhost:3000/combat/chardata", commandsToSend);
+			return true;
+		} catch (error) {
+			console.log(error);
+		}
+		*/
 
 		commandsToSend.sort(function(a, b) {
 			let agilA = battleCharData[a.c].stats.agility;		
@@ -196,6 +220,7 @@ function submitCommands() {
 			return agilB - agilA;
 		});
 		for (let i in commandsToSend) {
+			//send commands to server
 			battleCommands.push(commandsToSend[i]);
 		}
 	}
@@ -237,15 +262,15 @@ function update() {
                         charInst.y = targInst.y;
                         battleCommands.splice(1,0,{c: charId, type: 'skill_animation', targ: [targId], skill: command.skill, damage: command.damage, heal: command.heal, init: false});
                     }
-                }
+		}
 			} else if (command.type === 'skill_animation') {
 				for (let i  in command.targ) {
-                    let targId = command.targ[i];
-                    let targInst = battleList[targId];
+					let targId = command.targ[i];
+					let targInst = battleList[targId];
 					let targData = battleCharData[targId];
-                    let skill = command.skill;
-                    let skillTarget = skillData[skill].target;
-                    let c = battleCharData[command.c];
+					let skill = command.skill;
+					let skillTarget = skillData[skill].target;
+					let c = battleCharData[command.c];
 					let damage = calcSkillDamage(skill, c.stats, targData.stats);
 					let heal = calcSkillHeal(skill, c.stats, targData.stats);
 					battleAnimations.push(createBattleAnimation(command.skill, targInst.x, targInst.y, 'skill', targInst));

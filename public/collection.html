@@ -3,7 +3,6 @@
 	<head>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.js"></script>
-		<script src="/scripts/collection.js"></script>
 		<script src="/scripts/cookies.js"></script>
 		<script src="/classes/sprites.js"></script>
 		<script src="/data/elementData.js"></script>
@@ -14,14 +13,25 @@
 	</head>
 	<body>
 		<div id="mainMenu" v-html='createMenu()'></div>
-		<ul id='evobeastList' class='evobeastList'>
-		</ul>
-		<ul id='move'>
-		</ul>
+		<div id='collection'>
+			<ul class="evobeastList">
+				<li v-for="evobeast in evobeasts" draggable="true" v-on:dragstart="dragItem(evobeast)" v-on:dragover.prevent v-on:drop="dropItem(evobeast)">
+					<div class="evobeast-container" v-bind:style="{background: elementBackground(evobeast.evobeast)}">
+						<div class="evobeast-img"><img v-bind:src="imageSource(evobeast.name)"></img></div>
+						<div class="evobeast-item evobeast-name">{{evobeast.name}}</div>
+						<div class="evobeast-item">L. {{evobeast.level}}</div>
+						<div class="evobeast-item">HP: {{evobeast.vitality}}</div>
+						<div class="evobeast-item">MP: {{evobeast.spirit}}</div>
+					</div>
+				</li>
+			</ul>
+		</div>
 		<nav class="navbar navbar-expand-lg navbar-light nav-bottom">
 			<a class="navbar-brand" href="https://github.com/jhveem/evobeasts">git</a>
 		</nav>
 		<script src="/scripts/menu.js"></script>
+		<script src="/scripts/vCollection.js"></script>
+		<script src="/scripts/collection.js"></script>
 		<script>
 			var x, y, xShift, yShift;
 			window.onload = function() {
@@ -31,6 +41,7 @@
 				} else {
 					window.location.replace("login.html");
 				}
+				/*
 				var mydiv = document.getElementById('move');
 				window.addEventListener('mousemove', function(event) {
 					x = event.clientX;
@@ -40,6 +51,7 @@
 						mydiv.style.top = y + yShift + 'px';
 					}
 				}, false);
+				*/
 			};
 		</script>
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

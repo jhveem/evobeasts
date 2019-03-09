@@ -11,15 +11,14 @@ function loadCollection(name) {
 	.then(function(response) {
 		return response.json();
 	}).then(function(json) {
-		console.log(json);
 		for (let i in json.collection) {
 			let item = json.collection[i];
-			addListItem(item);
+			vCollection.addEvobeast(item);
+			//addListItem(item);
 		}
 	});
-
 }
-
+/*
 function createListItem(data, moveable) {
 	console.log(data);
 	var list = document.getElementById('evobeastList');
@@ -119,3 +118,4 @@ function grabListItem(myId) {
 		item.parentElement.removeChild(item);
 	}
 }
+//*/
